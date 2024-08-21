@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+.env
+.venv
+.next
+__pycache__
+db.sqlite3
