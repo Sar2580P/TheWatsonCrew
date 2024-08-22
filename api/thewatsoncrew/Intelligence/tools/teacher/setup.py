@@ -1,9 +1,9 @@
 from pydantic import BaseModel, field_validator
 from pathlib import Path
 from typing import Optional
-from Intelligence.node_processing.web_scrapper import Web_Scrapper
-from Intelligence.node_processing.ingestion import Pipeline
-from Intelligence.utils.misc_utils import pr
+from api.thewatsoncrew.Intelligence.node_processing.web_scrapper import Web_Scrapper
+from api.thewatsoncrew.Intelligence.node_processing.ingestion import Pipeline
+from api.thewatsoncrew.Intelligence.utils.misc_utils import pr
 from llama_index.core.schema import Document, TextNode, BaseNode
 from typing import List, ClassVar, Dict, Tuple
 from tqdm import tqdm
@@ -13,13 +13,14 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-from Intelligence.utils.templates import COMBINE_INFO_TEMPLATE, QUIZ_TEMPLATE
+from api.thewatsoncrew.Intelligence.utils.templates import COMBINE_INFO_TEMPLATE, QUIZ_TEMPLATE
 from llama_index.core.prompts import PromptTemplate
-from Intelligence.utils.llm_utils import Settings
-from Intelligence.utils.misc_utils import logger, pr, read_yaml
+from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings
+from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, pr, read_yaml
 import asyncio
-import ast
+import ast, json, re
 from collections import defaultdict
+from collections import OrderedDict
 
 class ReadingInfo(BaseModel):
     config : Dict = None
@@ -170,20 +171,18 @@ class ReadingInfo(BaseModel):
     
     def aggregate_metadata(self, metadata:List[Dict])->Dict:
         agg_metadata = defaultdict(set)
-        agg_metadata['external_ref'] = {}
+        agg_metadata['external_references'] = {}
         for meta in metadata:
             meta = ast.literal_eval(meta)
-            keywords = meta['key_words'].split(', ')
-            for w in keywords:
-                agg_metadata['key_words'].add(w)
+            keywords, external_refs = meta['key_words'].split('\n') , meta['external_ref'].split('\n')
+            for i in range(len(keywords)):
+                agg_metadata['external_references'][keywords[i]] = external_refs[i]
             
             agg_metadata['sources'].add(meta['source'])
-            agg_metadata['external_ref'].update(meta['external_ref'])  # external_ref is a dictionary
             
             for img_path in meta['imgs'].split('\n'):
                 agg_metadata['imgs'].add(img_path)
                 
-        agg_metadata['key_words'] = list(agg_metadata['key_words'])
         agg_metadata['sources'] = list(agg_metadata['sources'])
         agg_metadata['imgs'] = list(agg_metadata['imgs'])
 
@@ -229,13 +228,34 @@ class ReadingInfo(BaseModel):
             self.quiz_collection.extend(quiz)
         return self.quiz_collection
     
+    def create_video_frames(self):
+        frames = OrderedDict()
+        ct = 0 
+        for content , metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
+            contents = [part for part in re.split(r'(?<!#)##(?!#)', content) if part]
+
+            for sections in contents:
+                heading = sections.split('\n')[0].strip()
+                section_content = '\n'.join(sections.split('\n')[1:]).strip()
+                sub_contents = re.split(r'(?=###)', section_content)
+
+                for sub_content in sub_contents:
+                    frames[ct] = {
+                        'heading' : heading,
+                        'content' : sub_content,
+                        'metadata' : metadata
+                    }
+                    ct+=1
+        json.dump(frames, open(self.base_dir/'video_frames.json', 'w'))
     
 
-# KB_Creator = ReadingInfo.from_config(config_path='Intelligence/configs/tools/teacher.yaml')
-# x = a.ordering_content(pd.read_csv('Intelligence/tools/teacher/clustering_results.csv'))
-# y = asyncio.run(a.create_notes(x[:1]))
+KB_Creator = ReadingInfo.from_config(config_path='api/thewatsoncrew/Intelligence/configs/tools/teacher.yaml')
+# w = KB_Creator.get_clustering()
+x = KB_Creator.ordering_content(pd.read_csv('api/thewatsoncrew/Intelligence/tools/teacher/clustering_results.csv'))
+y = asyncio.run(KB_Creator.create_notes(x[:3]))
 # z = asyncio.run(a.create_quiz(y))
-# pr.green(y)
+pr.green(y)
+a = KB_Creator.create_video_frames()
 # pr.yellow(z)
         
     

@@ -20,6 +20,7 @@ You are provided with information collected though various sources. You need to 
 Not polluting the data with your thoughts neither missing out on any information present in data.
 Return in nice format with appropriate mark-up and bulleted points...
 
+Use ## for headings and ### for sub-headings.
 
 COLLECTED INFORMATION ---> 
 

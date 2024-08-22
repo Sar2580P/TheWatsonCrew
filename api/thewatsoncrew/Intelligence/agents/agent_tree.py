@@ -1,9 +1,9 @@
 '''
 These are non-leaf tools which has several leaf or non-leaf tools under them.
 '''
-from Intelligence.agents.agent_runner import MyAgentRunner
-from Intelligence.tools.tool_instance_mappings import tool_instance_mapping as TIM
-from Intelligence.utils.misc_utils import logger
+from api.thewatsoncrew.Intelligence.agents.agent_runner import MyAgentRunner
+from api.thewatsoncrew.Intelligence.tools.tool_instance_mappings import tool_instance_mapping as TIM
+from api.thewatsoncrew.Intelligence.utils.misc_utils import logger
 MEDICAL_AGENT_1 = MyAgentRunner.from_tools(
                         tools = [TIM['diabetes_doctor_tool'.upper()], TIM['blood_pressure_doctor_tool'.upper()]],
                         description='''Useful for queries related to medical diagnosis, diseases, remedies and fitness and exercise. It has a staff of expertise in diabetes and blood pressure domains.''',

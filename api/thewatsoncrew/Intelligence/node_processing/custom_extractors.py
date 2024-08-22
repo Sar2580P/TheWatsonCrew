@@ -9,10 +9,10 @@ from llama_index.core.service_context_elements.llm_predictor import (
     LLMPredictorType,
 )
 import ast
-from Intelligence.utils.llm_utils import Settings
-from Intelligence.utils.templates import DEFAULT_NER_TEMPLATE
+from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings
+from api.thewatsoncrew.Intelligence.utils.templates import DEFAULT_NER_TEMPLATE
 import re
-from Intelligence.node_processing.store import Vec_Store, VectorStoreIndex
+from api.thewatsoncrew.Intelligence.node_processing.store import Vec_Store, VectorStoreIndex
 
 class DescriptiveKeywords(BaseExtractor):
     """DescriptiveKeywords extractor. Useful for extracting complex named entities from text and 
