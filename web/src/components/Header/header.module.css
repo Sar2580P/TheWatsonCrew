@@ -15,13 +15,9 @@
   margin: auto;
 }
 .header_background {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  background: linear-gradient(
-    77deg,
-    rgba(20, 21, 28, 0.6) 0%,
-    rgba(41, 44, 51, 0.6) 100%
-  );
-  backdrop-filter: blur(25px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  background: radial-gradient(50% 50% at 50% 50%, #2172e51a 0, #21242900 100%);
+  backdrop-filter: blur(20px);
 }
 .line1,
 .line2,

@@ -11,20 +11,8 @@ const Header = () => {
   const [currentNav, setCurrentNav] = useState<number>(0);
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const navref = useRef<HTMLDivElement | any>(null);
-  const NavBarContent = [
-    "/Home",
-    "/Converse AI",
-    "/Insight AI",
-    "/Evaluate AI",
-    "/Chat AI",
-  ];
-  const NavBarContentLink = [
-    "/",
-    "/converse_ai",
-    "/insight_ai",
-    "/evaluate_ai",
-    "/chat_ai",
-  ];
+  const NavBarContent = ["/Home", "/Converse AI", "/Insight AI", "/Evaluate AI", "/Chat AI"];
+  const NavBarContentLink = ["/", "/converse_ai", "/insight_ai", "/evaluate_ai", "/chat_ai"];
   const currentPath = usePathname();
 
   const navBarBottomNavigation = (index: number) => {
@@ -65,9 +53,7 @@ const Header = () => {
       handleNavLinkClick(0);
       return;
     }
-    const currentIndex = NavBarContentLink.findIndex(
-      (path) => path === currentPath
-    );
+    const currentIndex = NavBarContentLink.findIndex(path => path === currentPath);
     if (currentIndex != -1) handleNavLinkClick(currentIndex);
   }, [currentPath]);
 
@@ -94,14 +80,7 @@ const Header = () => {
         <div className={classes.line2}></div>
         <div className={classes.line3}></div>
       </button>
-      <div
-        className={
-          isNavCollapsed
-            ? classes.right_Navigation_Collapsed
-            : classes.right_Navigation
-        }
-        ref={navref}
-      >
+      <div className={isNavCollapsed ? classes.right_Navigation_Collapsed : classes.right_Navigation} ref={navref}>
         {NavBarContent.map((item, index) => (
           <Link
             href={NavBarContentLink[index]}
