@@ -2,17 +2,17 @@ from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Union, Optional, Tuple
 import json, os
 from llama_index.core.retrievers import VectorIndexRetriever
-from Intelligence.node_processing.store import Vec_Store
+from api.thewatsoncrew.Intelligence.node_processing.store import Vec_Store
 from llama_index.core import get_response_synthesizer
-from Intelligence.utils.misc_utils import logger, pr
-from Intelligence.retrieval_response.templates import text_qa_template, refine_template, translation_template
+from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, pr
+from api.thewatsoncrew.Intelligence.retrieval_response.templates import text_qa_template, refine_template, translation_template
 from llama_index.core import PromptTemplate
 from llama_index.core.postprocessor import SimilarityPostprocessor, TimeWeightedPostprocessor
 from llama_index.core.query_engine.retriever_query_engine import RetrieverQueryEngine
 from collections import defaultdict
 from llama_index.core.schema import NodeWithScore
 import yaml
-from Intelligence.utils.llm_utils import Settings
+from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings
 from llama_index.core import  VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.response_synthesizers.factory import BaseSynthesizer
@@ -27,7 +27,7 @@ class Retriever(VectorIndexRetriever):
         **kwargs: Any,
     ) -> None:
         """Initialize params."""
-        self._index =  Vec_Store.get_vectorstore(os.path.join('Intelligence/vector_stores', index_path))
+        self._index =  Vec_Store.get_vectorstore(os.path.join('api/thewatsoncrew/Intelligence/vector_stores', index_path))
         
         with open(config_file_path, 'r') as f:
             config = yaml.safe_load(f) if config_file_path.endswith(".yaml") else json.load(f)
@@ -139,19 +139,19 @@ class ResponseSynthesizer(BaseModel):
         '''
 
         agg_metadata = defaultdict(set)
+        agg_metadata['external_references'] = {}
         
         for node in nodes:
             meta:Dict[str, Union[List, str]] = node.metadata
-            keywords = meta['key_words'].split(', ')
-            for w in keywords:
-                agg_metadata['key_words'].add(w)
+            keywords , external_ref = meta['key_words'].split('\n') , meta['external_ref'].split('\n')
+            for i in range(len(keywords)):
+                agg_metadata['external_references'][keywords[i]] = external_ref[i]
             
             agg_metadata['sources'].add(meta['source'])
             
             for img_path in meta['imgs'].split('\n'):
                 agg_metadata['imgs'].add(img_path)
                 
-        agg_metadata['key_words'] = list(agg_metadata['key_words'])
         agg_metadata['sources'] = list(agg_metadata['sources'])
         agg_metadata['imgs'] = list(agg_metadata['imgs'])
         
@@ -160,12 +160,12 @@ class ResponseSynthesizer(BaseModel):
     
     
     
-# Ret = Retriever(config_file_path = 'Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
+# Ret = Retriever(config_file_path = 'api/thewatsoncrew/Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
 # # x = Ret.retrieve('share some details on cancer?')
 # # x = A.respond_query('share some details on cancer?')
 # # print(x)
 
-# s = ResponseSynthesizer.initialize(config_file_path='Intelligence/configs/retrieval.yaml', 
+# s = ResponseSynthesizer.initialize(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', 
 #                                    retriever=Ret)
 # x = s.respond_query('Symptoms of high blood pressure.')
 # logger.info(x)

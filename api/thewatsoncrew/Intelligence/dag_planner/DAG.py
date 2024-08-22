@@ -4,7 +4,7 @@ from langchain.agents.loading import AGENT_TO_CLASS
 import json
 from langchain.agents.mrkl.base import ZeroShotAgent
 from langchain.output_parsers import OutputFixingParser
-from Intelligence.utils.misc_utils import logger, assert_, pr
+from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, assert_, pr
 # agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION
 # agent_cls = AGENT_TO_CLASS[agent]
 # agent_obj = agent_cls.from_llm_and_tools(
@@ -66,7 +66,7 @@ class CustomAgentExecutor(AgentExecutor):
 
             if isinstance(next_step_output, AgentFinish):
                 self.tool_count = 0       
-                with open (f'Intelligence/dag_planner/planning/{self.agent_name}_planning.json' , 'w') as f:
+                with open (f'api/thewatsoncrew/Intelligence/dag_planner/planning/{self.agent_name}_planning.json' , 'w') as f:
                     json.dump(self.web_schema , f)      
                 return self._return(
                     next_step_output, intermediate_steps, run_manager=run_manager

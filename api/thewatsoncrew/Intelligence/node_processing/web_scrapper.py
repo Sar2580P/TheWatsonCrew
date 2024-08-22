@@ -8,7 +8,7 @@ import bisect
 from llama_index.core import Document
 from typing import Union, List
 from collections import defaultdict 
-from Intelligence.utils.misc_utils import logger, assert_
+from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, assert_
 import re 
 
 class Web_Scrapper : 
@@ -169,8 +169,7 @@ class Web_Scrapper :
             lo  = bisect.bisect_left(link_idxs, idx)
             hi =  bisect.bisect_left(link_idxs, combined_indices[i+1]) if i+1 < len(combined_indices) else len(link_idxs)
             
-            key_words = []
-            external_ref = {}
+            key_words , external_ref = [] , []
             for j in range(lo, hi):
                 text:str = self.chunks[link_idxs[j]]['text'].strip()
                 url : str = self.chunks[link_idxs[j]]['url']
@@ -181,13 +180,12 @@ class Web_Scrapper :
                     continue
                 
                 key_words.append(text)
-                external_ref[text] = url
+                external_ref.append(url)
                 
             key_words = key_words if len(key_words)<50 else key_words[:50]      # reducing no. of keywords to 50
             meta_data['imgs'] = '\n'.join(meta_data['imgs'])    
-            meta_data['key_words']  = ', '.join(key_words)
-            # meta_data['external_ref'] =  '\n'.join([f"- {k} : {v}"  for k,v in external_ref.items()])
-            meta_data['external_ref'] = external_ref
+            meta_data['key_words']  = '\n'.join(key_words)
+            meta_data['external_ref'] =  '\n'.join(external_ref)
             meta_data['source'] = self.url
             
             # Creating document object
@@ -195,7 +193,7 @@ class Web_Scrapper :
                             metadata= meta_data,
                             doc_id=self.url + '_' + str(i),
                             )
-            doc.excluded_llm_metadata_keys = ["external_ref" , "imgs", "key_words", "source"]
+            doc.excluded_llm_metadata_keys = ["external_ref" , "imgs", "source"]
             doc.excluded_embed_metadata_keys = ["external_ref" , "imgs", "source" ]
            
             list_of_docs.append(doc)

@@ -22,8 +22,8 @@ from llama_index.core.base.llms.types import (
 from llama_index.core.utilities.gemini_utils import merge_neighboring_same_role_messages
 from llama_index.core.prompts import PromptTemplate
 load_dotenv(find_dotenv()) # read local .env file
-from Intelligence.utils.misc_utils import pr
-from Intelligence.retrieval_response.templates import translation_template
+from api.thewatsoncrew.Intelligence.utils.misc_utils import pr
+from api.thewatsoncrew.Intelligence.retrieval_response.templates import translation_template
 
 
 # langchain utilities for llm
