@@ -66,7 +66,7 @@ class CustomAgentExecutor(AgentExecutor):
 
             if isinstance(next_step_output, AgentFinish):
                 self.tool_count = 0       
-                with open (f'/home/sarvagya/cleverchat/Intelligence/dag_planner/planning/{self.agent_name}_planning.json' , 'w') as f:
+                with open (f'Intelligence/dag_planner/planning/{self.agent_name}_planning.json' , 'w') as f:
                     json.dump(self.web_schema , f)      
                 return self._return(
                     next_step_output, intermediate_steps, run_manager=run_manager

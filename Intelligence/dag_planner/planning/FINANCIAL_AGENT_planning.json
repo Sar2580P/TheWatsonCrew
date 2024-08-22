@@ -1,1 +1,11 @@
-[{"tool": {"thought": "Thought: The user wants to know about the stock market investment.", "tool_input": "How can I start investing in stock market?", "tool_name": "FINANCE_ADVISOR_TOOL", "tool_usage_idx": 0, "tool_output": "$$PREV[0]"}}]
+[
+    {
+        "tool": {
+            "thought": "Thought: The question is about stock market investment, so we should use FINANCE_ADVISOR_TOOL",
+            "tool_input": "How can I invest in stock market?",
+            "tool_name": "FINANCE_ADVISOR_TOOL",
+            "tool_usage_idx": 0,
+            "tool_output": "$$PREV[0]"
+        }
+    }
+]

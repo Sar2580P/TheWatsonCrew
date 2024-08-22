@@ -27,7 +27,7 @@ class Retriever(VectorIndexRetriever):
         **kwargs: Any,
     ) -> None:
         """Initialize params."""
-        self._index =  Vec_Store.get_vectorstore(os.path.join('/home/sarvagya/cleverchat/Intelligence/vector_stores', index_path))
+        self._index =  Vec_Store.get_vectorstore(os.path.join('Intelligence/vector_stores', index_path))
         
         with open(config_file_path, 'r') as f:
             config = yaml.safe_load(f) if config_file_path.endswith(".yaml") else json.load(f)
@@ -120,14 +120,15 @@ class ResponseSynthesizer(BaseModel):
         
     def respond_query(self, query:str)-> Tuple[str, Dict[str, Union[List, str]]]:
         self.get_query_engine()
-        print('HI')
         try:
             response = self.query_engine.query(query)
+            logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
+            aggregated_metadata = self.aggregate_metadata(response.source_nodes)
+            return response.response ,  aggregated_metadata 
         except Exception as e:
-            pr.green(e)
-        logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
-        aggregated_metadata = self.aggregate_metadata(response.source_nodes)
-        return response.response ,  aggregated_metadata 
+            logger.error(e)
+            return 'Sorry, I could not find any relevant information.' , {}
+        
 
     def aggregate_metadata(self, nodes: List[NodeWithScore]):
         '''

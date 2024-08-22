@@ -30,6 +30,7 @@ ROOT = MyAgentRunner.from_tools(
     name = 'ROOT',
 )
 
-# ROOT.input = 'What is diabetes? What are the symptoms of high blood pressure? How can I invest in stock market? Get work-items similar to TKT-123 and summarize them.'
-# instance_list = ROOT.dag_response()
-# logger.critical(instance_list)
+if __name__=='__main__':
+    ROOT.input = 'What is diabetes? What are the symptoms of high blood pressure? How can I invest in stock market?'
+    instance_list = ROOT.dag_response()
+    logger.critical(instance_list)

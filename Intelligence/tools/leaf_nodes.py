@@ -22,8 +22,8 @@ class DiabetesDoctor(BaseTool):
     emoji = "\U00002695\U0000FE0F I am a doctor! 🩺"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', index_path='blood_sugar_medical_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='Intelligence/configs/retrieval.yaml', index_path='blood_sugar_medical_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
@@ -52,8 +52,8 @@ class BPDoctor(BaseTool):
     emoji = "\U00002695\U0000FE0F I am a doctor! 🩺"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', index_path='blood_pressure_medical_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='Intelligence/configs/retrieval.yaml', index_path='blood_pressure_medical_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
@@ -83,8 +83,8 @@ class FinanceAdvisor(BaseTool):
     emoji =  "\U0001F4B0 I'm your financial advisor! 💰"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', index_path='financial_advisor_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='/home/sarvagya/cleverchat/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='Intelligence/configs/retrieval.yaml', index_path='financial_advisor_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
