@@ -1,0 +1,20 @@
+[
+    {
+        "tool": {
+            "thought": "Thought: The question contains two sub-questions, one about diabetes and one about blood pressure.",
+            "tool_input": "What is diabetes?",
+            "tool_name": "DIABETES_DOCTOR_TOOL",
+            "tool_usage_idx": 0,
+            "tool_output": "$$PREV[0]"
+        }
+    },
+    {
+        "tool": {
+            "thought": "DIABETES_DOCTOR_TOOL has answered the question on diabetes",
+            "tool_input": "What are the symptoms of high blood pressure?",
+            "tool_name": "BLOOD_PRESSURE_DOCTOR_TOOL",
+            "tool_usage_idx": 1,
+            "tool_output": "$$PREV[1]"
+        }
+    }
+]

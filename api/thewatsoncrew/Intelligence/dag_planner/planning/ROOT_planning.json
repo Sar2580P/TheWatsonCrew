@@ -1,0 +1,20 @@
+[
+    {
+        "tool": {
+            "thought": "Action: MEDICAL_AGENT",
+            "tool_input": "What is diabetes? What are the symptoms of high blood pressure?",
+            "tool_name": "MEDICAL_AGENT",
+            "tool_usage_idx": 1,
+            "tool_output": "$$PREV[1]"
+        }
+    },
+    {
+        "tool": {
+            "thought": "Action: FINANCIAL_AGENT",
+            "tool_input": "How can I invest in stock market?",
+            "tool_name": "FINANCIAL_AGENT",
+            "tool_usage_idx": 2,
+            "tool_output": "$$PREV[2]"
+        }
+    }
+]
