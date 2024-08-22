@@ -1,3 +1,15 @@
+import yaml 
+from colorama import Fore, Style
+import logging
+from colorama import Fore, Style, init
+
+def read_yaml(file_path: str) -> dict:
+    with open(file_path, 'r') as file:
+        data = yaml.safe_load(file)
+    return data
+    
+    
+    
 class Colored_Text:
     def __init__(self):
         self.tick , self.cross = '\u2713' , '\u2717'
@@ -19,12 +31,10 @@ pr = Colored_Text()
 # pr.green(f'Hello {pr.tick}', delimiter='\n')
 # pr.yellow('Hello')
 
-from colorama import Fore, Style
 def assert_(condition: bool , message: str):
     assert condition, Fore.RED + message + Style.RESET_ALL
     
-import logging
-from colorama import Fore, Style, init
+
 
 # Initialize colorama
 init(autoreset=True)
