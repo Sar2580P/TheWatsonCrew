@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+  width: 65%;
+  padding: var(--pd-700) var(--pd-600) var(--pd-450) var(--pd-600);
+  background-color: var(--white-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-larger-outset);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.box {
+  position: relative;
+  width: -webkit-fill-available;
+}
+
+.box > label {
+  position: absolute;
+  font-size: var(--ft-300);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--title-color);
+  background-color: var(--white-color);
+  padding: 0 var(--pd-100);
+  margin: 0 0.5rem;
+  transition: 0.1s ease-out;
+  transform-origin: left top;
+  pointer-events: none;
+  width: inherit;
+}
+
+.box > input {
+  font-size: var(--ft-300);
+  outline: none;
+  border: 1px solid var(--black-color);
+  border-radius: var(--br-400);
+  padding: var(--pd-300) var(--pd-300);
+  color: var(--title-color);
+  transition: 0.1s ease-out;
+  width: -webkit-fill-available;
+}
+
+.box > input:focus {
+  border-color: var(--primary-color);
+}
+
+.box > input:focus + label {
+  color: var(--primary-color);
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.box > input:not(:placeholder-shown) + label {
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.box > label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125px;
+  font-size: var(--ft-300);
+  padding: var(--pd-100) var(--pd-300);
+  border: none;
+  border-radius: var(--br-400);
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  cursor: pointer;
+  transition: 0.1s ease-out;
+}
+
+.container > button:hover {
+  background-color: var(--secondary-color);
+}
+
+.container > button:active {
+  background-color: var(--tertiary-color);
+}
+
+.container > button:focus {
+  outline: none;
+}

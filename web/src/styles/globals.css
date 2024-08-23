@@ -114,11 +114,11 @@ a {
   --br-900: 1.5rem;
 
   /* BOX SHADOW */
-  --box-shadow-radius: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  --box-shadow-small-outset: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  --box-shadow-small-inset: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
-  --box-shadow-medium-inradiuset: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
-  --box-shadow-larger-outset: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  --box-shadow-radius: rgba(255, 255, 255, 0.46) 0px 1px 4px;
+  --box-shadow-small-outset: rgba(199, 199, 199, 0.5) 0px 2px 8px 0px;
+  --box-shadow-small-inset: rgba(180, 180, 180, 0.65) 0px -50px 36px -28px inset;
+  --box-shadow-medium-inradiuset: rgba(255, 255, 255, 0.35) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+  --box-shadow-larger-outset: rgba(255, 255, 255, 0.6) 0px 19px 38px, rgba(255, 255, 255, 0.52) 0px 15px 12px;
 
   /*BACKGROUND COLOR  */
   --background-color: linear-gradient(126deg, #ffffff 4.79%, #f5f5f5 95.5%);
