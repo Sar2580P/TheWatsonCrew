@@ -1,5 +1,5 @@
 from .dummy_data import CHAT_AI
-from api.thewatsoncrew.Intelligence.agents.agent_tree import ROOT
+from Intelligence.agents.agent_tree import ROOT
 from typing import List, Dict
 
 def llm_chat_response(message : str)-> List[Dict]:

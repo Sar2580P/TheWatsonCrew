@@ -1,8 +1,0 @@
-[
-    {
-        "source_type": "weblink",
-        "source": "https://my.clevelandclinic.org/health/diseases/4314-hypertension-high-blood-pressure",
-        "issue": "ingestion_error",
-        "error": "Metadata length (175) is longer than chunk size (175). Consider increasing the chunk size or decreasing the size of your metadata to avoid this."
-    }
-]

@@ -1,8 +1,0 @@
-[
-    {
-        "source_type": "weblink",
-        "source": "https://corporatefinanceinstitute.com/resources/management/financial-literacy/",
-        "issue": "ingestion_error",
-        "error": "Metadata length (177) is longer than chunk size (175). Consider increasing the chunk size or decreasing the size of your metadata to avoid this."
-    }
-]
