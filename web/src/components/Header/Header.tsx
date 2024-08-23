@@ -11,8 +11,8 @@ const Header = () => {
   const [currentNav, setCurrentNav] = useState<number>(0);
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const navref = useRef<HTMLDivElement | any>(null);
-  const NavBarContent = ["/Home", "/Converse AI", "/Insight AI", "/Evaluate AI", "/Chat AI"];
-  const NavBarContentLink = ["/", "/converse_ai", "/insight_ai", "/evaluate_ai", "/chat_ai"];
+  const NavBarContent = ["/Home", "/Blog AI", "/Watch AI", "/Evaluate AI", "/Chat AI"];
+  const NavBarContentLink = ["/", "/blog_ai", "/watch_ai", "/evaluate_ai", "/chat_ai"];
   const currentPath = usePathname();
 
   const navBarBottomNavigation = (index: number) => {
