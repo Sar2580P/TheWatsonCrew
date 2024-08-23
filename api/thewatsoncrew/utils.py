@@ -1,6 +1,5 @@
 from rest_framework.response import Response
-from .model.links_knowledge import llm_made_links_knowledge_base , llm_converse_ai_readme , llm_insight_ai_data
-from .model.test_evaluate_ai import get_test_paper_evaluate_ai
+from .model.links_knowledge import llm_made_links_knowledge_base , llm_converse_ai_readme , llm_insight_ai_data, get_test_paper_evaluate_ai
 from .model.chat import llm_chat_response
 
 def success_response(data):
