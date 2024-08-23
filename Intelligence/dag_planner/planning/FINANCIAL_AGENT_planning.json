@@ -1,0 +1,1 @@
+[{"tool": {"thought": "Thought: I need to query the FINANCE_ADVISOR_TOOL to find information about investing in stock market.", "tool_input": "How can I invest in stock market?", "tool_name": "FINANCE_ADVISOR_TOOL", "tool_usage_idx": 0, "tool_output": "$$PREV[0]"}}]

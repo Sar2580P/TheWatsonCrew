@@ -1,0 +1,15 @@
+file_path : Intelligence/tools/teacher/links.txt
+base_dir : Intelligence/tools/teacher
+name : teacher_knowledge_base
+chunk_size : 300
+chunk_overlap : 75
+
+
+# pca
+n_components : 100
+whiten : True
+
+# clustering
+eps : 0.5
+min_samples : 3
+metric : cosine
