@@ -12,7 +12,7 @@ def getRoutes(request):
             'description': 'Link knowledge base'
         },
         {
-            'Endpoint': '/thewatsoncrew/converse_ai_readme/',
+            'Endpoint': '/thewatsoncrew/blogs_ai/',
             'method': 'GET',
             'body': None,
             'description': 'Converse AI readme'
@@ -24,7 +24,7 @@ def getRoutes(request):
             'description': 'Chat'
         },
         {
-            'Endpoint': '/thewatsoncrew/insight_ai_data/',
+            'Endpoint': '/thewatsoncrew/watch_ai/',
             'method': 'GET',
             'body': None,
             'description': 'Insight AI data'
@@ -50,11 +50,11 @@ def link_knowledge_base(request):
     return post_link_knowledge_base(knowledge_base)
 
 @api_view(['GET'])
-def converse_ai_readme(request):
+def blogs_ai(request):
     return get_converse_ai_readme()
 
 @api_view(['GET'])
-def insight_ai_data (request):
+def watch_ai (request):
     return get_insight_ai_data()
 
 @api_view(['GET'])

@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: -webkit-fill-available;
+}
+
+.user {
+  display: flex;
+  gap: 1rem;
+  width: -webkit-fill-available;
+}
+
+.user__image > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.user__name__follow__time {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user__name__follow {
+  display: flex;
+  gap: 1rem;
+}
+
+.user__name {
+  font-weight: bold;
+  font-size: var(--ft-400);
+}
+
+.user__follow {
+  color: #1a8917;
+  font-size: var(--ft-400);
+  cursor: pointer;
+}
+
+.user__time {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user__time__text {
+  color: var(--para-color);
+  font-size: var(--ft-300);
+}
+
+.user__time__dot {
+  color: var(--para-color);
+}
+
+.user__time__date {
+  color: var(--para-color);
+  font-size: var(--ft-300);
+}
+
+.appreciation {
+  display: flex;
+  gap: 1rem;
+  width: -webkit-fill-available;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-top: solid 1px var(--para-color);
+  border-bottom: solid 1px var(--para-color);
+}
+
+.appreciation__icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.appreciation__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ft-300);
+  color: var(--light-title-color);
+  gap: 0.25rem;
+}
+.appreciation__icon > svg {
+  display: flex;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+.appreciation__icon > svg:hover {
+  color: var(--secondary-color);
+}
