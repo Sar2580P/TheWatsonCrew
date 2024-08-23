@@ -1,5 +1,5 @@
 "use client";
-import classes from "@/app/evaluate_ai/components/Result/Result.module.css";
+import classes from "@/app/evaluate_ai/components/result/Result.module.css";
 
 interface ResultProps {
   heading: string;
