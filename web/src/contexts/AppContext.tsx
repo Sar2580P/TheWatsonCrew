@@ -2,12 +2,23 @@
 import React, { useState, useEffect } from "react";
 import { useNotification } from "@/hooks/useNotification";
 
+interface blog_ai {
+  id: string;
+  text: string;
+  external_references: {};
+  sources: string[];
+  imgs: string[];
+}
+
 type AppContextType = {
   link: string;
   setLink: (link: string) => void;
   links: string[];
   setLinksHandler: (link: string) => void;
   onDeleteLinkHandler: (link: string) => void;
+
+  blogs: blog_ai[];
+  setBlogsHandler: (blogs: blog_ai[]) => void;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -16,6 +27,9 @@ const AppContext = React.createContext<AppContextType>({
   links: [],
   setLinksHandler: () => {},
   onDeleteLinkHandler: () => {},
+
+  blogs: [],
+  setBlogsHandler: () => {},
 });
 
 type Props = {
@@ -43,12 +57,28 @@ export const AppContextProvider: React.FC<Props> = props => {
     localStorage.setItem("the_watson_crew_links", JSON.stringify(links.filter(note => note !== link)));
   };
 
+  // CODE BLOG AI HUB OR BLOG PAGE
+  const [blogs, setBlogs] = useState<blog_ai[]>([]);
+  const setBlogsHandler = (blogs: blog_ai[]) => {
+    setBlogs(blogs);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("the_watson_crew_blogs", JSON.stringify(blogs));
+    }
+  };
+
   useEffect(() => {
     const loadLinks = () => {
       if (typeof window !== "undefined") {
         const savedLinks = localStorage.getItem("the_watson_crew_links");
         if (savedLinks) {
           setLinks(JSON.parse(savedLinks));
+        }
+      }
+
+      if (typeof window !== "undefined") {
+        const savedBlogs = localStorage.getItem("the_watson_crew_blogs");
+        if (savedBlogs) {
+          setBlogs(JSON.parse(savedBlogs));
         }
       }
     };
@@ -63,6 +93,9 @@ export const AppContextProvider: React.FC<Props> = props => {
         links,
         setLinksHandler,
         onDeleteLinkHandler,
+
+        blogs,
+        setBlogsHandler,
       }}
     >
       {props.children}

@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 60%;
+}
+
+.blog > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blog h1,
+.blog h2,
+.blog h3,
+.blog h4,
+.blog h5,
+.blog h6 {
+  margin: 0;
+  padding: 0;
+  color: var(--light-title-color);
+  display: block;
+  width: 100%;
+}
+.blog h1 {
+  font-size: 1.5rem;
+}
+.blog h2 {
+  font-size: 1.25rem;
+}
+.blog h3 {
+  font-size: 1.1rem;
+}
+.blog h4 {
+  font-size: 1rem;
+}
+.blog h5 {
+  font-size: 0.9rem;
+}
+.blog h6 {
+  font-size: 0.8rem;
+}
+.blog ul {
+  list-style: circle;
+  padding-left: 0.75rem;
+  margin: 0;
+  display: block;
+  width: 100%;
+}
+.blog ul li {
+  margin: 0;
+  padding: 0.15rem 0.5rem;
+  display: block;
+}
+.blog p {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+.blog a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.blog a:hover {
+  color: var(--secondary-color);
+}
