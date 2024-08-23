@@ -2,9 +2,9 @@
 This file contains actual tools, which only does execution not planning.
 '''
 from langchain.tools import BaseTool
-from typing import Optional, List, Any 
-from api.thewatsoncrew.Intelligence.retrieval_response.retriever import Retriever, ResponseSynthesizer
-from api.thewatsoncrew.Intelligence.utils.misc_utils import pr
+from typing import Optional, Any 
+from Intelligence.retrieval_response.retriever import Retriever, ResponseSynthesizer
+from Intelligence.utils.misc_utils import pr
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
@@ -22,8 +22,8 @@ class DiabetesDoctor(BaseTool):
     emoji = "\U00002695\U0000FE0F I am a doctor! 🩺"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', index_path='blood_sugar_medical_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='../Intelligence/configs/retrieval.yaml', index_path='blood_sugar_medical_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
@@ -52,8 +52,8 @@ class BPDoctor(BaseTool):
     emoji = "\U00002695\U0000FE0F I am a doctor! 🩺"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', index_path='blood_pressure_medical_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='../Intelligence/configs/retrieval.yaml', index_path='blood_pressure_medical_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
@@ -83,8 +83,8 @@ class FinanceAdvisor(BaseTool):
     emoji =  "\U0001F4B0 I'm your financial advisor! 💰"
     def __init__(self):
         super().__init__()
-        self.retriever = Retriever(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', index_path='financial_advisor_db')
-        self.response_generator = ResponseSynthesizer.initialize(config_file_path='api/thewatsoncrew/Intelligence/configs/retrieval.yaml', 
+        self.retriever = Retriever(config_file_path='../Intelligence/configs/retrieval.yaml', index_path='financial_advisor_db')
+        self.response_generator = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
                                                                  retriever=self.retriever)
     
     def _run(
@@ -115,7 +115,6 @@ class GetSimilarWorkItems(BaseTool):
     def _run(
         self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> Any:
-        print('shri radhe, inside get_similar_work_items')
         return {'tool_response' : 'used GetSimilarWorkItems'}
     async def _arun(
         self, query: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None
@@ -136,7 +135,6 @@ class Summarize(BaseTool):
     def _run(
         self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> Any:
-        print('inside summarize_objects') 
         return {'tool_response' : 'used Summarize'}
     async def _arun(
         self, query: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None
@@ -156,7 +154,6 @@ class Prioritize(BaseTool):
     def _run(
         self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> Any:
-        print('inside prioritize_objects') 
         return {'tool_response' : 'used Prioritize'}
     async def _arun(
         self, query: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None
@@ -176,7 +173,6 @@ class SearchObjectByName(BaseTool):
     def _run(
         self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> Any:
-        print('inside search_object_by_name')
         return {'tool_response' : 'used search_object_by_name'}
 
     async def _arun(
@@ -198,7 +194,6 @@ class CreateActionableTasksFromText(BaseTool):
     def _run(
         self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> Any:
-        print('inside create_actionable_tasks_from_text') 
         return {'tool_response' : 'used CreateActionableTasksFromText'}
     
     async def _arun(

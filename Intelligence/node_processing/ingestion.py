@@ -3,11 +3,11 @@ from llama_index.core.extractors import TitleExtractor, QuestionsAnsweredExtract
 from llama_index.core.ingestion import IngestionPipeline, IngestionCache
 from llama_index.core import Document
 from typing import Union, List
-from api.thewatsoncrew.Intelligence.utils.misc_utils import pr
-from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings
-from api.thewatsoncrew.Intelligence.node_processing.custom_extractors import DescriptiveKeywords
-from api.thewatsoncrew.Intelligence.node_processing.store import Vec_Store
-from api.thewatsoncrew.Intelligence.node_processing.web_scrapper import Web_Scrapper
+from Intelligence.utils.misc_utils import pr
+from Intelligence.utils.llm_utils import Settings
+from Intelligence.node_processing.custom_extractors import DescriptiveKeywords
+from Intelligence.node_processing.store import Vec_Store
+from Intelligence.node_processing.web_scrapper import Web_Scrapper
 import json 
 
 class Pipeline:
@@ -33,7 +33,7 @@ class Pipeline:
             web_links = [w.strip() for w in f.readlines()]
                     
         unsuccessful_trials = []
-        index = Vec_Store.get_vectorstore(path=f'api/thewatsoncrew/Intelligence/vector_stores/{name}_db', is_ephemeral = not is_persistent)
+        index = Vec_Store.get_vectorstore(path=f'Intelligence/vector_stores/{name}_db', is_ephemeral = not is_persistent)
         
         for link in web_links:
             scrapper = Web_Scrapper(str(link))
@@ -69,8 +69,8 @@ class Pipeline:
                 unsuccessful_trials.append(d)
         
         if len(unsuccessful_trials)>0:
-            pr.red(f'Saving unsuccessful trials in : api/thewatsoncrew/Intelligence/data_sources/unsuccessful_trials_{name}.json')
-            with open(f'api/thewatsoncrew/Intelligence/data_sources/unsuccessful_trials_{name}.json', 'w') as f:
+            pr.red(f'Saving unsuccessful trials in : Intelligence/data_sources/unsuccessful_trials_{name}.json')
+            with open(f'Intelligence/data_sources/unsuccessful_trials_{name}.json', 'w') as f:
                 json.dump(unsuccessful_trials, f)
         else:
             pr.green('<--- All links scraped and ingested successfully --->')

@@ -8,7 +8,7 @@ import bisect
 from llama_index.core import Document
 from typing import Union, List
 from collections import defaultdict 
-from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, assert_
+from Intelligence.utils.misc_utils import logger, assert_
 import re 
 
 class Web_Scrapper : 

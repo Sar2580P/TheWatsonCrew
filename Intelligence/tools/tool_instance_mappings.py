@@ -1,4 +1,4 @@
-from api.thewatsoncrew.Intelligence.tools.leaf_nodes import *
+from Intelligence.tools.leaf_nodes import *
 from langchain.tools import BaseTool
 
 

@@ -29,16 +29,16 @@ from llama_index.core.objects.base import ObjectRetriever
 from llama_index.core.tools import BaseTool, ToolOutput
 from langchain.tools import BaseTool, StructuredTool
 from llama_index.core.prompts.mixin import PromptMixinType
-from api.thewatsoncrew.Intelligence.dag_planner.DAG import CustomAgentExecutor
-from api.thewatsoncrew.Intelligence.dag_planner.node import Node 
+from Intelligence.dag_planner.DAG import CustomAgentExecutor
+from Intelligence.dag_planner.node import Node 
 from collections import deque
-from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, pr
+from Intelligence.utils.misc_utils import logger, pr
 import networkx as nx
 import matplotlib.pyplot as plt
 import json
 from langchain.agents.output_parsers.react_single_input import ReActSingleInputOutputParser
-from api.thewatsoncrew.Intelligence.dag_planner.agent import PersonalAgent
-from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings, llm as langchain_llm
+from Intelligence.dag_planner.agent import PersonalAgent
+from Intelligence.utils.llm_utils import Settings, llm as langchain_llm
 import os, glob
 
 class MyAgentRunner(AgentRunner):
@@ -116,7 +116,7 @@ class MyAgentRunner(AgentRunner):
         
         # re-create planning for new query
         if self.name == 'ROOT':
-            files = glob.glob(os.path.join('api/thewatsoncrew/Intelligence/dag_planner/planning', '*'))
+            files = glob.glob(os.path.join('Intelligence/dag_planner/planning', '*'))
 
             for file in files:
                 if os.path.isfile(file):
@@ -293,7 +293,7 @@ class MyAgentRunner(AgentRunner):
     
     def dag_response(self, instance_display_order:List[Node] = [],  **kwargs: Any) -> List[Node]:
         self.dag_agent_worker({'input' : self.input})
-        dag_setup = self.create_graph_from_nodes_json(f'api/thewatsoncrew/Intelligence/dag_planner/planning/{self.name}_planning.json')
+        dag_setup = self.create_graph_from_nodes_json(f'Intelligence/dag_planner/planning/{self.name}_planning.json')
         logger.debug('\n---------Filling nodes topo-bfs manner--------\n')
         # applying topo-bfs starting with nodes having 0 indegree
         deq = deque()
@@ -351,4 +351,4 @@ class MyAgentRunner(AgentRunner):
 
     #     # Display the graph
     #     plt.title('Diagram of DAG Planning')
-    #     plt.savefig('api/thewatsoncrew/Intelligence/dag_planner/dag_planning_graph.png')
+    #     plt.savefig('Intelligence/dag_planner/dag_planning_graph.png')

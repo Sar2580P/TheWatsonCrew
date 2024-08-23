@@ -6,10 +6,10 @@ from langchain.prompts import PromptTemplate
 from langchain.tools.base import BaseTool
 from langchain.agents.mrkl.base import ZeroShotAgent
 from langchain.agents.agent import  AgentOutputParser
-from api.thewatsoncrew.Intelligence.dag_planner.templates_prompts import PREFIX, FORMAT_INSTRUCTIONS, SUFFIX, FORMAT_INSTRUCTIONS_DAG
+from Intelligence.dag_planner.templates_prompts import PREFIX, FORMAT_INSTRUCTIONS, SUFFIX, FORMAT_INSTRUCTIONS_DAG
 from langchain.chains.llm import LLMChain
-from api.thewatsoncrew.Intelligence.utils.llm_utils import llm
-from api.thewatsoncrew.Intelligence.utils.misc_utils import logger
+from Intelligence.utils.llm_utils import llm
+from Intelligence.utils.misc_utils import logger
 
 class PersonalAgent(ZeroShotAgent):
     

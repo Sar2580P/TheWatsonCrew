@@ -1,9 +1,9 @@
 from pydantic import BaseModel, field_validator
 from pathlib import Path
 from typing import Optional
-from api.thewatsoncrew.Intelligence.node_processing.web_scrapper import Web_Scrapper
-from api.thewatsoncrew.Intelligence.node_processing.ingestion import Pipeline
-from api.thewatsoncrew.Intelligence.utils.misc_utils import pr
+from Intelligence.node_processing.web_scrapper import Web_Scrapper
+from Intelligence.node_processing.ingestion import Pipeline
+from Intelligence.utils.misc_utils import pr
 from llama_index.core.schema import Document, TextNode, BaseNode
 from typing import List, ClassVar, Dict, Tuple
 from tqdm import tqdm
@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-from api.thewatsoncrew.Intelligence.utils.templates import COMBINE_INFO_TEMPLATE, QUIZ_TEMPLATE
+from Intelligence.utils.templates import COMBINE_INFO_TEMPLATE, QUIZ_TEMPLATE
 from llama_index.core.prompts import PromptTemplate
-from api.thewatsoncrew.Intelligence.utils.llm_utils import Settings
-from api.thewatsoncrew.Intelligence.utils.misc_utils import logger, pr, read_yaml
+from Intelligence.utils.llm_utils import Settings
+from Intelligence.utils.misc_utils import logger, pr, read_yaml
 import asyncio
 import ast, json, re
 from collections import defaultdict
@@ -44,10 +44,11 @@ class ReadingInfo(BaseModel):
         instance.config = config
         return instance
     
-    def create_knowledgebase(self)-> Dict[int, List[Document]]:
-        # scrape the links 
-        with open(self.file_path, 'r') as f:
-            web_links = [w.strip() for w in f.readlines()]
+    def create_knowledgebase(self , web_links:List[str]=None)-> Dict[int, List[Document]]:
+        if not web_links:
+            logger.debug('No web-links provided, using default from links.txt')
+            web_links = [w.strip() for w in open(self.file_path, 'r').readlines()]
+
 
         unsuccessful_trials , final_docs = [] , {}
         src_label = 0
@@ -73,12 +74,12 @@ class ReadingInfo(BaseModel):
 
         return final_docs
     
-    def create_embeddings(self)-> List[TextNode]:
+    def create_embeddings(self , web_links:List[str]=None)-> List[TextNode]:
         logger.debug('Creating embeddings ...')
         transform_pipeline = Pipeline(chunk_size=self.chunk_size, 
                                       chunk_overlap=self.chunk_overlap)
         
-        labelled_docs = self.create_knowledgebase()
+        labelled_docs = self.create_knowledgebase(web_links)
         final_docs = []
         for label, docs in labelled_docs.items():
             rank = 0
@@ -91,9 +92,9 @@ class ReadingInfo(BaseModel):
         return transform_pipeline.run_ingestion(final_docs)
 
 
-    def get_clustering(self):
+    def get_clustering(self, web_links:List[str]=None):
         logger.debug('Clustering the information chunks ...')
-        embedded_nodes = self.create_embeddings()
+        embedded_nodes = self.create_embeddings(web_links=web_links)
 
         # Step 2: Perform DBScan clustering
         embeddings = np.array([node.embedding for node in tqdm(embedded_nodes, 
@@ -188,7 +189,7 @@ class ReadingInfo(BaseModel):
 
         return agg_metadata
     
-    async def create_notes(self, contents: List[str]) -> List[str]:
+    async def create_notes(self, max_notes:int = 2) -> List[str]:
         
         async def fetch_note(content: str, template:str) -> str:
             full_prompt = PromptTemplate(template).format(info= content)
@@ -197,7 +198,7 @@ class ReadingInfo(BaseModel):
             return note
         try:
             # Create a list of tasks for asynchronous fetching of notes
-            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(contents[:2], desc = 'making notes using LLM')]
+            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
             
             # Await the completion of all tasks
             self.aggregated_notes_collection = await asyncio.gather(*tasks)
@@ -207,7 +208,7 @@ class ReadingInfo(BaseModel):
             return
             
     
-    async def create_quiz(self, contents: List[BaseNode]) -> List[Dict]:
+    async def create_quiz(self) -> List[Dict]:
         async def fetch_docs(content: str, template:str) -> str:
             full_prompt = PromptTemplate(template).format(info= content)
             response = f'''{Settings.llm.complete(full_prompt)}'''
@@ -219,7 +220,7 @@ class ReadingInfo(BaseModel):
                 return []
 
         # Create a list of tasks for asynchronous fetching of notes
-        tasks = [fetch_docs(content, self.quiz_template) for content in tqdm(contents, desc = 'making quiz using LLM')]
+        tasks = [fetch_docs(content, self.quiz_template) for content in tqdm(self.aggregated_notes_collection, desc = 'making quiz using LLM')]
         
         # Await the completion of all tasks
         quiz_list = await asyncio.gather(*tasks)
@@ -249,14 +250,12 @@ class ReadingInfo(BaseModel):
         json.dump(frames, open(self.base_dir/'video_frames.json', 'w'))
     
 
-KB_Creator = ReadingInfo.from_config(config_path='api/thewatsoncrew/Intelligence/configs/tools/teacher.yaml')
-# w = KB_Creator.get_clustering()
-x = KB_Creator.ordering_content(pd.read_csv('api/thewatsoncrew/Intelligence/tools/teacher/clustering_results.csv'))
-y = asyncio.run(KB_Creator.create_notes(x[:3]))
-# z = asyncio.run(a.create_quiz(y))
-pr.green(y)
-a = KB_Creator.create_video_frames()
-# pr.yellow(z)
-        
-    
-    
+if __name__ == '__main__':
+    KB_Creator = ReadingInfo.from_config(config_path='Intelligence/configs/tools/teacher.yaml')
+    w = KB_Creator.get_clustering()
+    x = KB_Creator.ordering_content(pd.read_csv('Intelligence/tools/teacher/clustering_results.csv'))
+    y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
+    z = asyncio.run(KB_Creator.create_quiz())
+    pr.green(y)
+    a = KB_Creator.create_video_frames()
+    # pr.yellow(z)

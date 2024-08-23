@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field, model_validator
 from typing import List, Dict, Union
 import re
-from api.thewatsoncrew.Intelligence.utils.misc_utils import assert_, logger
-from api.thewatsoncrew.Intelligence.tools.tool_instance_mappings import tool_instance_mapping as TIM  
+from Intelligence.utils.misc_utils import assert_, logger
+from Intelligence.tools.tool_instance_mappings import tool_instance_mapping as TIM  
 
 
 class Node(BaseModel):
