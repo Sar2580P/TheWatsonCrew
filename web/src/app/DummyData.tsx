@@ -145,7 +145,15 @@ const WATCH_AI = [
   },
 ];
 
-const EVALUATE_AI = [
+interface Question {
+  question: string;
+  type: "text" | "single" | "multi";
+  options?: string[];
+  id: string;
+  answer: string;
+}
+
+const EVALUATE_AI: Question[] = [
   {
     id: "1",
     question: "What is the primary function of a neural network in AI?",

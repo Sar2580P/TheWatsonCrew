@@ -10,6 +10,14 @@ interface blog_ai {
   imgs: string[];
 }
 
+interface Question {
+  question: string;
+  type: "text" | "single" | "multi";
+  options?: string[];
+  id: string;
+  answer: string;
+}
+
 type AppContextType = {
   link: string;
   setLink: (link: string) => void;
@@ -19,6 +27,15 @@ type AppContextType = {
 
   blogs: blog_ai[];
   setBlogsHandler: (blogs: blog_ai[]) => void;
+
+  evaluateAiQuestions: Question[];
+  onEvaluateAiQuestions: (questions: Question[]) => void;
+  isevaluateAiAnswereCorrect: { id: string; selectedOption: boolean | null }[];
+  onEvaluateAiAnswerCorrect: (id: string, selectedOption: string) => void;
+  isQuizCompleted: boolean;
+  onQuizCompleted: (toggle: boolean) => void;
+  quizResult: Record<string, string>;
+  onQuizResult: (result: Record<string, string>) => void;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -30,6 +47,15 @@ const AppContext = React.createContext<AppContextType>({
 
   blogs: [],
   setBlogsHandler: () => {},
+
+  evaluateAiQuestions: [],
+  onEvaluateAiQuestions: () => {},
+  isevaluateAiAnswereCorrect: [],
+  onEvaluateAiAnswerCorrect: () => {},
+  isQuizCompleted: false,
+  onQuizCompleted: () => {},
+  quizResult: {},
+  onQuizResult: () => {},
 });
 
 type Props = {
@@ -66,6 +92,30 @@ export const AppContextProvider: React.FC<Props> = props => {
     }
   };
 
+  // CODE PERSONALIZED AI ASSESSMENTS PAGE
+  const [evaluateAiQuestions, setEvaluateAiQuestions] = useState<Question[]>([]);
+  const [isevaluateAiAnswereCorrect, setIsevaluateAiAnswereCorrect] = useState<
+    { id: string; selectedOption: boolean | null }[]
+  >([]);
+  const onEvaluateAiQuestions = (questions: Question[]) => {
+    setEvaluateAiQuestions(questions);
+    setIsevaluateAiAnswereCorrect(questions.map(question => ({ id: question.id, selectedOption: null })));
+  };
+  const onEvaluateAiAnswerCorrect = (id: string, selectedOption: string) => {
+    const isCorrect = evaluateAiQuestions.find(question => question.id === id)?.answer === selectedOption;
+    setIsevaluateAiAnswereCorrect(prev =>
+      prev.map(item => (item.id === id ? { ...item, selectedOption: isCorrect } : item))
+    );
+  };
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+  const onQuizCompleted = (toggle: boolean) => {
+    setIsQuizCompleted(toggle);
+  };
+  const [quizResult, setQuizResult] = useState<Record<string, string>>({});
+  const onQuizResult = (result: Record<string, string>) => {
+    setQuizResult(result);
+  };
+
   useEffect(() => {
     const loadLinks = () => {
       if (typeof window !== "undefined") {
@@ -96,6 +146,15 @@ export const AppContextProvider: React.FC<Props> = props => {
 
         blogs,
         setBlogsHandler,
+
+        evaluateAiQuestions,
+        onEvaluateAiQuestions,
+        isevaluateAiAnswereCorrect,
+        onEvaluateAiAnswerCorrect,
+        isQuizCompleted,
+        onQuizCompleted,
+        quizResult,
+        onQuizResult,
       }}
     >
       {props.children}

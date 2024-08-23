@@ -11,6 +11,7 @@
   z-index: 1000;
   transition: opacity 0.3s ease-in-out;
 }
+
 .popup {
   background: white;
   padding: 2rem;
@@ -24,7 +25,9 @@
     transform 0.3s ease-out,
     opacity 0.3s ease-out;
   animation: bump 0.5s ease forwards;
+  color: var(--black-color);
 }
+
 @keyframes bump {
   0% {
     transform: scale(0);
@@ -69,6 +72,7 @@
 
 .item {
   margin-bottom: 10px;
+  color: var(--light-black-color);
 }
 
 .item span {
