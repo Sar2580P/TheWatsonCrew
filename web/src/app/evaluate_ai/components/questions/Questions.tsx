@@ -6,7 +6,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import React, { useEffect, useContext } from "react";
 import useGetLLMResponse from "@/hooks/useGetLLMResponse";
 import LoadingComponent from "@/components/Loading/Loading";
-import Popup from "@/app/evaluate_ai/components/result/Result";
+import Result from "@/app/evaluate_ai/components/result/Result";
 import classes from "@/app/evaluate_ai/components/questions/Questions.module.css";
 
 const Questions = () => {
@@ -121,7 +121,7 @@ const Questions = () => {
         </div>
       ))}
       {isQuizCompleted && (
-        <Popup
+        <Result
           heading="Test Result 🎉"
           data={quizResult}
           onClose={() => {
