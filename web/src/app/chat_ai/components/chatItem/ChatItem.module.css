@@ -144,4 +144,5 @@
   gap: 1rem;
   color: var(--light-white-color);
   font-size: 0.6rem;
+  width: -webkit-fill-available;
 }

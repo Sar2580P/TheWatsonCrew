@@ -2,7 +2,11 @@ import React from "react";
 import Image from "next/image";
 import classes from "@/app/chat_ai/components/restImages/RestImages.module.css";
 
+const urlRegex = new RegExp("^(http|https)://[^\\s/$.?#].[^\\s]*$", "i");
+
 const RestImages = ({ restImages }: { restImages: string[] }) => {
+  restImages = restImages.filter(img => urlRegex.test(img));
+
   return (
     <div className={classes["container"]}>
       <h1 className={classes["heading"]}>All Images</h1>

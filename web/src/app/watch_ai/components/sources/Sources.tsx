@@ -3,7 +3,10 @@ import { MdArrowDropDown } from "react-icons/md";
 import { MdArrowDropUp } from "react-icons/md";
 import classes from "@/app/watch_ai/components/sources/Sources.module.css";
 
+const urlRegex = new RegExp("^(http|https)://[^\\s/$.?#].[^\\s]*$", "i");
+
 const Sources = ({ sources }: { sources: string[] }) => {
+  sources = sources.filter(source => urlRegex.test(source));
   const [showAll, setShowAll] = useState(false);
 
   const toggleShowAll = () => {

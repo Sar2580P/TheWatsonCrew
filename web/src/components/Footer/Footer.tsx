@@ -17,7 +17,7 @@ const footer_Items = [
   },
   {
     category: "Products",
-    subcategories: ["Converse AI", "Insight AI", "Evaluate AI"],
+    subcategories: ["Blog AI", "Watch AI", "Evaluate AI", "Chat AI"],
   },
   {
     category: "Connect",

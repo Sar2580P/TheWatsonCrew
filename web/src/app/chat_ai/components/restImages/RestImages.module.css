@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 1rem;
   overflow-x: hidden;
+  width: -webkit-fill-available;
 }
 
 .container > .heading {
