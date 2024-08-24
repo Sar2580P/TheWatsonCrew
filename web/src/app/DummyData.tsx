@@ -13,7 +13,17 @@ const BLOG_AI = [
   },
 ];
 
-const WATCH_AI = [
+interface watch_ai {
+  heading: string;
+  content: string;
+  metadata: {
+    external_references: {};
+    sources: string[];
+    imgs: string[];
+  };
+}
+
+const WATCH_AI: watch_ai[] = [
   {
     heading: "Yoga for Diabetes Management",
     content:
@@ -187,7 +197,15 @@ const EVALUATE_AI: Question[] = [
   },
 ];
 
-const CHAT_AI = [
+interface chat_ai {
+  id: string;
+  text: string;
+  external_references: {};
+  sources: string[];
+  imgs: string[];
+}
+
+const CHAT_AI: chat_ai[] = [
   {
     id: "1",
     text: "### Introduction\n\nYoga is a holistic practice that has been shown to have numerous health benefits, including the management of diabetes. Diabetes is a chronic condition that affects the body's ability to regulate blood sugar levels. Over time, high blood sugar levels can damage the heart, blood vessels, eyes, kidneys, and nerves.\n\nYoga can help to manage diabetes by:\n\n* Improving insulin sensitivity\n* Lowering blood sugar levels\n* Reducing inflammation\n* Promoting weight loss\n* Improving overall health and well-being\n\n",

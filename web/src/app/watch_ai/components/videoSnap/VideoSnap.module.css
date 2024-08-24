@@ -1,0 +1,267 @@
+.container {
+  padding: 1rem;
+  border-radius: 8px;
+  transition: box-shadow var(--transition-speed);
+  animation: slideIn 0.5s ease-out forwards;
+  position: relative;
+  height: 70vh;
+  min-height: 400px;
+  overflow-y: scroll;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow-small-inset);
+}
+
+.container > img {
+  width: 280px;
+  aspect-ratio: 16 / 9;
+  animation: slideInImage 0.5s ease-out 0s forwards;
+  border-radius: 8px;
+}
+
+@keyframes slideInImage {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.video-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.video-container > h2 {
+  position: absolute;
+  top: 0.4rem;
+  left: 1rem;
+  padding: 0;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--white-color);
+  text-align: left;
+  width: -webkit-fill-available;
+  font-weight: 700;
+  font-size: var(--ft-600);
+  animation: slideInFromLeft 0.5s ease-out 0s forwards;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.video-container > video {
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.lower-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--black-color);
+  height: 24px;
+  border-radius: 0px 0px 8px 8px;
+}
+
+.desc {
+  position: absolute;
+  left: 5.5%;
+  top: 25%;
+  width: 380px;
+  height: 250px;
+  overflow-y: scroll;
+}
+
+@keyframes slidedesc {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  width: -webkit-fill-available;
+  position: absolute;
+  bottom: 0.25rem;
+  right: 0.25rem;
+}
+
+.controls > button {
+  margin: 0 5px;
+  padding: 7px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--black-color);
+  color: #fff;
+  transition:
+    background-color var(--transition-speed),
+    transform var(--transition-speed),
+    box-shadow var(--transition-speed);
+}
+
+.controls > button:hover,
+.controls > button:focus {
+  transform: translateY(-2px);
+  box-shadow: var(--hover-box-shadow);
+}
+
+.controls > button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 90vw;
+  }
+  .controls > button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+.rate-slider {
+  display: flex;
+  flex-direction: column;
+}
+
+.controls > .rate-slider > label {
+  font-size: 0.6rem;
+  text-align: left;
+  width: 75px;
+}
+
+.rateSlider {
+  -webkit-appearance: none;
+  width: 75px;
+  height: 6px;
+  border-radius: 2px;
+  background: #ddd;
+  outline: none;
+  opacity: 0.8;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.rateSlider:hover {
+  opacity: 1;
+}
+
+.rateSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--black-color);
+  cursor: pointer;
+}
+
+.rateSlider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--black-color);
+  cursor: pointer;
+}
+
+.desc h1,
+.desc h2,
+.desc h3,
+.desc h4,
+.desc h5,
+.desc h6 {
+  margin: 0;
+  padding: 0;
+  color: var(--light-title-color);
+  display: block;
+  width: 100%;
+}
+.desc h1 {
+  font-size: 1.5rem;
+}
+.desc h2 {
+  font-size: 1.25rem;
+}
+.desc h3 {
+  font-size: 1.1rem;
+}
+.desc h4 {
+  font-size: 1rem;
+}
+.desc h5 {
+  font-size: 0.9rem;
+}
+.desc h6 {
+  font-size: 0.8rem;
+}
+.desc ul {
+  list-style: circle;
+  padding-left: 0.75rem;
+  margin: 0;
+  display: block;
+  width: 100%;
+}
+.desc ul li {
+  margin: 0;
+  padding: 0.15rem 0.5rem;
+  display: block;
+  color: var(--black-color);
+  font-size: 0.9rem;
+}
+.desc p {
+  margin: 0;
+  padding: 0;
+  display: inline;
+  text-align: start;
+  font-size: 0.9rem;
+  animation: slidedesc 0.5s ease-out 0s forwards;
+  color: var(--black-color);
+  padding-top: 0.5rem;
+}
+.desc a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.desc a:hover {
+  color: var(--secondary-color);
+}
+
+.desc > span {
+  color: var(--white-color);
+  text-decoration: var(--white-color);
+  font-size: 0.9rem;
+  display: inline;
+}

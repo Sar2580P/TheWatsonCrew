@@ -18,6 +18,29 @@ interface Question {
   answer: string;
 }
 
+type Chat = {
+  role: string;
+  parts: {
+    content: {
+      id: string;
+      text: string;
+      external_references: {};
+      sources: string[];
+      imgs: string[];
+    }[];
+  }[];
+}[];
+
+interface watch_ai {
+  heading: string;
+  content: string;
+  metadata: {
+    external_references: {};
+    sources: string[];
+    imgs: string[];
+  };
+}
+
 type AppContextType = {
   link: string;
   setLink: (link: string) => void;
@@ -36,6 +59,14 @@ type AppContextType = {
   onQuizCompleted: (toggle: boolean) => void;
   quizResult: Record<string, string>;
   onQuizResult: (result: Record<string, string>) => void;
+
+  converseAiChats: Chat;
+  onConverseAiChats: (chat: Chat) => void;
+  currentQuestion: string;
+  setCurrentQuestion: (question: string) => void;
+
+  videoSnaps: watch_ai[];
+  onSetVideoSnapsHandler: (videoSnaps: watch_ai[]) => void;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -45,10 +76,10 @@ const AppContext = React.createContext<AppContextType>({
   setLinksHandler: () => {},
   onDeleteLinkHandler: () => {},
 
-  blogs: [],
+  blogs: [] as blog_ai[],
   setBlogsHandler: () => {},
 
-  evaluateAiQuestions: [],
+  evaluateAiQuestions: [] as Question[],
   onEvaluateAiQuestions: () => {},
   isevaluateAiAnswereCorrect: [],
   onEvaluateAiAnswerCorrect: () => {},
@@ -56,6 +87,14 @@ const AppContext = React.createContext<AppContextType>({
   onQuizCompleted: () => {},
   quizResult: {},
   onQuizResult: () => {},
+
+  converseAiChats: [] as Chat,
+  onConverseAiChats: () => {},
+  currentQuestion: "",
+  setCurrentQuestion: () => {},
+
+  videoSnaps: [] as watch_ai[],
+  onSetVideoSnapsHandler: () => {},
 });
 
 type Props = {
@@ -87,9 +126,6 @@ export const AppContextProvider: React.FC<Props> = props => {
   const [blogs, setBlogs] = useState<blog_ai[]>([]);
   const setBlogsHandler = (blogs: blog_ai[]) => {
     setBlogs(blogs);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("the_watson_crew_blogs", JSON.stringify(blogs));
-    }
   };
 
   // CODE PERSONALIZED AI ASSESSMENTS PAGE
@@ -116,19 +152,29 @@ export const AppContextProvider: React.FC<Props> = props => {
     setQuizResult(result);
   };
 
+  // CODE INTELLIGENT AI CHATBOT PAGE
+  const [converseAiMarkdown, setConverseAiMarkdown] = useState<string[]>([]);
+  const onConverseAiMarkdown = (markdown: string[]) => {
+    setConverseAiMarkdown(markdown);
+  };
+  const [converseAiChats, setConverseAiChats] = useState<Chat>([]);
+  const onConverseAiChats = (chat: Chat) => {
+    setConverseAiChats(prev => [...prev, ...chat]);
+  };
+  const [currentQuestion, setCurrentQuestion] = useState<string>("");
+
+  // CODE WATCH AI HUB OR WATCH PAGE
+  const [videoSnaps, setVideoSnaps] = useState<watch_ai[]>([]);
+  const onSetVideoSnapsHandler = (videoSnaps: watch_ai[]) => {
+    setVideoSnaps(videoSnaps);
+  };
+
   useEffect(() => {
     const loadLinks = () => {
       if (typeof window !== "undefined") {
         const savedLinks = localStorage.getItem("the_watson_crew_links");
         if (savedLinks) {
           setLinks(JSON.parse(savedLinks));
-        }
-      }
-
-      if (typeof window !== "undefined") {
-        const savedBlogs = localStorage.getItem("the_watson_crew_blogs");
-        if (savedBlogs) {
-          setBlogs(JSON.parse(savedBlogs));
         }
       }
     };
@@ -155,6 +201,14 @@ export const AppContextProvider: React.FC<Props> = props => {
         onQuizCompleted,
         quizResult,
         onQuizResult,
+
+        converseAiChats,
+        onConverseAiChats,
+        currentQuestion,
+        setCurrentQuestion,
+
+        videoSnaps,
+        onSetVideoSnapsHandler,
       }}
     >
       {props.children}

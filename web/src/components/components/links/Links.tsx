@@ -4,6 +4,7 @@ import Link from "@/components/components/link/Link";
 import React, { useContext } from "react";
 import Button from "@/reusables/Button/Button";
 import AppContext from "@/contexts/AppContext";
+import Loader from "@/reusables/Loader/Loader";
 import usePostLLMResponse from "@/hooks/usePostLLMResponse";
 
 const Links = () => {
@@ -19,6 +20,7 @@ const Links = () => {
         <Link key={index} link={link} index={index + 1} />
       ))}
       {links.length > 0 ? <Button onClick={handleSubmit} text="Update AI knowledge" bottom="1rem" /> : null}
+      {loading && <Loader text="Training AI" />}
     </div>
   );
 };
