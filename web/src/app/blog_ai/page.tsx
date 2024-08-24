@@ -12,6 +12,7 @@ export default function Blogs() {
   const { getLLMResponse, loading } = useGetLLMResponse();
 
   useEffect(() => {
+    if (blogs.length) return;
     const fetchData = async () => {
       const response = await getLLMResponse("blogs_ai/");
       if (response) setBlogsHandler(response);

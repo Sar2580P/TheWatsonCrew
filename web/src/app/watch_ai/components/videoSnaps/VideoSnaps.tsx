@@ -1,12 +1,13 @@
 "use client";
 import { WATCH_AI } from "@/app/DummyData";
 import Loader from "@/reusables/Loader/Loader";
-import React, { useState, useEffect } from "react";
+import AppContext from "@/contexts/AppContext";
 import useGetLLMResponse from "@/hooks/useGetLLMResponse";
+import React, { useState, useEffect, useContext } from "react";
+import Sources from "@/app/watch_ai/components/sources/Sources";
 import VideoSnap from "@/app/watch_ai/components/videoSnap/VideoSnap";
 import { MdOutlineNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
 import classes from "@/app/watch_ai/components/videoSnaps/VideoSnaps.module.css";
-import Sources from "@/app/watch_ai/components/sources/Sources";
 import ExternalReferences from "@/app/watch_ai/components/externalReferences/ExternalReferences";
 
 interface watch_ai {
@@ -22,13 +23,14 @@ interface watch_ai {
 const VideoSnaps: React.FC = () => {
   const { getLLMResponse, loading } = useGetLLMResponse();
   const [currentVideoSnapIndex, setCurrentVideoSnapIndex] = useState(0);
-  const [videoSnaps, setVideoSnaps] = useState([] as watch_ai[]);
+  const { videoSnaps, onSetVideoSnapsHandler } = useContext(AppContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getLLMResponse("insight_ai_data/");
-      if (response) setVideoSnaps(response);
-      else setVideoSnaps(WATCH_AI);
+      if (videoSnaps.length > 0) return;
+      const response = await getLLMResponse("watch_ai/");
+      if (response) onSetVideoSnapsHandler(response);
+      else onSetVideoSnapsHandler(WATCH_AI);
     };
     if (typeof window !== "undefined") fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
