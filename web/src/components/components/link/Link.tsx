@@ -16,7 +16,7 @@ const Links = ({ index, link }: LinksProps) => {
     <div className={classes["container"]}>
       <span>{index}.</span>
       <a href={link} target="_blank" rel="noopener noreferrer">
-        {link}
+        {link.length > 70 ? `${link.substring(0, 70)}... ` : link}
       </a>
       <button onClick={() => onDeleteLinkHandler(link)}>
         <MdDelete size={20} />

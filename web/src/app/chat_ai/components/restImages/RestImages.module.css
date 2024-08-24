@@ -5,7 +5,7 @@
   overflow-x: hidden;
 }
 
-.container > h1 {
+.container > .heading {
   color: var(--light-title-color);
   font-size: 1.5rem;
   margin: 0;
@@ -31,7 +31,6 @@
   border-radius: 4px;
   object-fit: cover;
 }
-
 @keyframes autoRun {
   0% {
     left: 100%;

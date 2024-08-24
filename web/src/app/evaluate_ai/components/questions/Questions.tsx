@@ -24,6 +24,7 @@ const Questions = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (evaluateAiQuestions.length > 0) return;
       const response = await getLLMResponse("evaluate_ai/");
       if (response) onEvaluateAiQuestions(response);
       else {

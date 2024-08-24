@@ -2,18 +2,18 @@
   display: flex;
   justify-content: center;
   padding-top: 1rem;
+  width: -webkit-fill-available;
 }
 
 .blog {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   width: 60%;
 }
 
 .blog > img {
   width: 100%;
-  height: 100%;
   object-fit: cover;
 }
 

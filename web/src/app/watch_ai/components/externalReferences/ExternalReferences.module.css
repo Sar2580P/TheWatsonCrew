@@ -5,15 +5,15 @@
 }
 
 .container > h1 {
-  color: var(--light-title-color);
-  font-size: 1.5rem;
+  color: var(--white-color);
+  font-size: 1rem;
   margin: 0;
   padding: 0;
 }
 
 .external__references_box {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
@@ -21,13 +21,15 @@
 
 .external__references_box > a {
   text-decoration: none;
-  font-size: 0.7rem;
-  color: var(--white-color);
-  background-color: var(--toogle-button-bg);
-  padding: 0.25rem 0.5rem;
-  border-radius: 15px;
   cursor: pointer;
   text-transform: capitalize;
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  padding-right: 0.25rem;
+}
+
+.external__references_box > a:not(:last-child) {
+  border-right: 1px solid var(--primary-color);
 }
 
 .external__references_box > a:hover {
