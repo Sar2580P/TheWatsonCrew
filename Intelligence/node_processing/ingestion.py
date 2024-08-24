@@ -33,7 +33,7 @@ class Pipeline:
             web_links = [w.strip() for w in f.readlines()]
                     
         unsuccessful_trials = []
-        index = Vec_Store.get_vectorstore(path=f'Intelligence/vector_stores/{name}_db', is_ephemeral = not is_persistent)
+        index = Vec_Store.get_vectorstore(path=f'../Intelligence/vector_stores/{name}_db', is_ephemeral = not is_persistent)
         
         for link in web_links:
             scrapper = Web_Scrapper(str(link))
@@ -69,8 +69,8 @@ class Pipeline:
                 unsuccessful_trials.append(d)
         
         if len(unsuccessful_trials)>0:
-            pr.red(f'Saving unsuccessful trials in : Intelligence/data_sources/unsuccessful_trials_{name}.json')
-            with open(f'Intelligence/data_sources/unsuccessful_trials_{name}.json', 'w') as f:
+            pr.red(f'Saving unsuccessful trials in : ../Intelligence/data_sources/unsuccessful_trials_{name}.json')
+            with open(f'../Intelligence/data_sources/unsuccessful_trials_{name}.json', 'w') as f:
                 json.dump(unsuccessful_trials, f)
         else:
             pr.green('<--- All links scraped and ingested successfully --->')

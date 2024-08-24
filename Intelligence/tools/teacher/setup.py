@@ -197,14 +197,23 @@ class ReadingInfo(BaseModel):
             note = Settings.llm.complete(full_prompt).text.strip()
             return note
         try:
+            pr.purple(len(self.content))
             # Create a list of tasks for asynchronous fetching of notes
             tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
             
             # Await the completion of all tasks
             self.aggregated_notes_collection = await asyncio.gather(*tasks)
-            return self.aggregated_notes_collection
+            response = []
+            for note, metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
+                d = {"text" : note}
+                d.update(metadata)
+                response.append(d)
+                
+            # with open('../output.json', 'w') as json_file:
+            #     json.dump(response, json_file, indent=4)
+            return response
         except Exception as e:
-            pr.red(e)
+            logger.error(str(e))
             return
             
     
@@ -230,8 +239,7 @@ class ReadingInfo(BaseModel):
         return self.quiz_collection
     
     def create_video_frames(self):
-        frames = OrderedDict()
-        ct = 0 
+        frames = []
         for content , metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
             contents = [part for part in re.split(r'(?<!#)##(?!#)', content) if part]
 
@@ -241,21 +249,22 @@ class ReadingInfo(BaseModel):
                 sub_contents = re.split(r'(?=###)', section_content)
 
                 for sub_content in sub_contents:
-                    frames[ct] = {
+                    frames.append({
                         'heading' : heading,
                         'content' : sub_content,
                         'metadata' : metadata
-                    }
-                    ct+=1
+                    })
+                    
         json.dump(frames, open(self.base_dir/'video_frames.json', 'w'))
     
 
 if __name__ == '__main__':
-    KB_Creator = ReadingInfo.from_config(config_path='Intelligence/configs/tools/teacher.yaml')
-    w = KB_Creator.get_clustering()
-    x = KB_Creator.ordering_content(pd.read_csv('Intelligence/tools/teacher/clustering_results.csv'))
+    KB_Creator = ReadingInfo.from_config(config_path='../Intelligence/configs/tools/teacher.yaml')
+    # w = KB_Creator.get_clustering()
+    x = KB_Creator.ordering_content(pd.read_csv('../Intelligence/tools/teacher/clustering_results.csv'))
     y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
-    z = asyncio.run(KB_Creator.create_quiz())
     pr.green(y)
-    a = KB_Creator.create_video_frames()
-    # pr.yellow(z)
+    # z = asyncio.run(KB_Creator.create_quiz())
+    # # pr.yellow(z)
+    # a = KB_Creator.create_video_frames()
+    
