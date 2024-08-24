@@ -148,7 +148,7 @@ class Web_Scrapper :
                             (self.blog_dict['list'][self.bound_dict['list'][0]:self.bound_dict['list'][1]+1] if 'list' in self.blog_dict else [])
         combined_indices = self.remove_too_small_texts(sorted(combined_indices))
 
-        img_idxs = (self.blog_dict['image'][self.bound_dict['image'][0]:self.bound_dict['image'][1]+1] if 'image' in self.blog_dict else [])
+        img_idxs = (self.blog_dict['image'][self.bound_dict['image'][0]+2:self.bound_dict['image'][1]] if 'image' in self.blog_dict else [])
         link_idxs = (self.blog_dict['hyperlink'][self.bound_dict['hyperlink'][0]:self.bound_dict['hyperlink'][1]+1] if 'hyperlink' in self.blog_dict else [])
         caption_idxs = (self.blog_dict['caption'][self.bound_dict['caption'][0]:self.bound_dict['caption'][1]+1] if 'caption' in self.blog_dict else [])    
         
@@ -175,7 +175,7 @@ class Web_Scrapper :
                 url : str = self.chunks[link_idxs[j]]['url']
                 
                 if(any(word in text.lower() for word in (self.restricted+['['])) or len(text.split())>5 or len(text)<3 or
-                   re.match(r"^(?!https?:\/\/).+", url) or re.search(r"share on \w+" , text.lower()) or re.search(r"follow us on \w+" , text.lower())
+                   (not bool(re.match(r"^(?!https?:\/\/).+", url))) or re.search(r"share on \w+" , text.lower()) or re.search(r"follow us on \w+" , text.lower())
                    ):   # ignoring the links with citation [1], [2] etc.
                     continue
                 
@@ -222,6 +222,8 @@ class Web_Scrapper :
         
         
 if __name__=='__main__':    
-    scr = Web_Scrapper('https://www.yogajournal.com/poses/yoga-by-benefit/high-blood-pressure/yoga-for-high-blood-pressure/')
-    scr.create_docs()           
+    scr = Web_Scrapper('https://towardsdatascience.com/transformers-141e32e69591')
+    d = scr.create_docs()      
+    logger.critical(d)
+
 

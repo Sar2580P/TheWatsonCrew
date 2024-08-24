@@ -17,7 +17,10 @@ from llama_index.core import  VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.response_synthesizers.factory import BaseSynthesizer
 from llama_index.retrievers.bm25 import BM25Retriever
+import warnings
 
+# Suppress specific deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="langchain.memory")
 class Retriever(VectorIndexRetriever):    
     def __init__(
         self,
@@ -121,6 +124,7 @@ class ResponseSynthesizer(BaseModel):
     def respond_query(self, query:str)-> Tuple[str, Dict[str, Union[List, str]]]:
         self.get_query_engine()
         try:
+            # response = asyncio.run(self.query_engine.aquery(query))
             response = self.query_engine.query(query)
             logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
             aggregated_metadata = self.aggregate_metadata(response.source_nodes)
@@ -129,6 +133,16 @@ class ResponseSynthesizer(BaseModel):
             logger.error(e)
             return 'Sorry, I could not find any relevant information.' , {}
         
+    async def arespond_query(self, query: str) -> Tuple[str, Dict[str, Union[List, str]]]:
+        self.get_query_engine()  # Assuming this might be an async operation too
+        try:
+            response = await self.query_engine.aquery(query)  # Using async query
+            logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
+            aggregated_metadata = self.aggregate_metadata(response.source_nodes)
+            return response.response, aggregated_metadata
+        except Exception as e:
+            logger.error(e)
+            return 'Sorry, I could not find any relevant information.', {}    
 
     def aggregate_metadata(self, nodes: List[NodeWithScore]):
         '''
@@ -158,15 +172,37 @@ class ResponseSynthesizer(BaseModel):
         # logger.debug(f'Aggregated metadata : {agg_metadata}')
         return agg_metadata
     
-    
-    
-# Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
-# # x = Ret.retrieve('share some details on cancer?')
-# # x = A.respond_query('share some details on cancer?')
-# # print(x)
 
-# s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
-#                                    retriever=Ret)
-# x = s.respond_query('Symptoms of high blood pressure.')
-# logger.info(x)
+if __name__=='__main__':
+    import asyncio   
+    import time
+    Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
+    # x = Ret.retrieve('share some details on cancer?')
+    # x = A.respond_query('share some details on cancer?')
+    # print(x)
+
+    s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
+                                    retriever=Ret)
+    async def main():
+        # Creating the list of coroutines without calling them directly
+        x = [
+            s.arespond_query('Symptoms of high blood pressure.'),
+            s.arespond_query('Symptoms of high blood pressure.'),
+            s.arespond_query('Symptoms of high blood pressure.')
+        ]
+        
+        y = await asyncio.gather(*x)  # Await the gathered coroutines
+        return y
+
+    # start = time.time()
+    # # Run the async main function
+    # y = asyncio.run(main())
+
+    # print('Time taken : ', time.time()-start)   
+    start = time.time()
+    s.respond_query('Symptoms of high blood pressure.')
+    # x = [s.respond_query('Symptoms of high blood pressure.'),s.respond_query('Symptoms of high blood pressure.'),s.respond_query('Symptoms of high blood pressure.')]
+    print('Time taken : ', time.time()-start)
+
+
 

@@ -17,7 +17,7 @@ Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action, pass in the query in natural language
-Observation: $$PREV[i], representing the output of the ith action
+Observation: $$PREV[i], representing the output of the ith action, believe that $$PREV[i] answers the i_th action input
     ... (this Thought/ Action/ Action Input/ Observation can repeat N times)
 
 Thought: Thinking whether the sequence of action input represent the question correctly

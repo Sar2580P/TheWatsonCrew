@@ -190,31 +190,32 @@ class ReadingInfo(BaseModel):
         return agg_metadata
     
     async def create_notes(self, max_notes:int = 2) -> List[str]:
-        
+
         async def fetch_note(content: str, template:str) -> str:
             full_prompt = PromptTemplate(template).format(info= content)
 
             note = Settings.llm.complete(full_prompt).text.strip()
             return note
-        try:
-            pr.purple(len(self.content))
-            # Create a list of tasks for asynchronous fetching of notes
-            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
+        # try:
+        pr.purple(len(self.content))
+        # Create a list of tasks for asynchronous fetching of notes
+        tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
+        
+        # Await the completion of all tasks
+        self.aggregated_notes_collection = await asyncio.gather(*tasks)
+        response = []
+        for note, metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
+            d = {"text" : note}
+            d.update(metadata)
+            response.append(d)
             
-            # Await the completion of all tasks
-            self.aggregated_notes_collection = await asyncio.gather(*tasks)
-            response = []
-            for note, metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
-                d = {"text" : note}
-                d.update(metadata)
-                response.append(d)
-                
-            # with open('../output.json', 'w') as json_file:
-            #     json.dump(response, json_file, indent=4)
-            return response
-        except Exception as e:
-            logger.error(str(e))
-            return
+        # with open('../output.json', 'w') as json_file:
+        #     json.dump(response, json_file, indent=4)
+        print(response , '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+        return response
+        # except Exception as e:
+        #     logger.error(str(e))
+        #     return
             
     
     async def create_quiz(self) -> List[Dict]:
@@ -234,8 +235,14 @@ class ReadingInfo(BaseModel):
         # Await the completion of all tasks
         quiz_list = await asyncio.gather(*tasks)
         self.quiz_collection = []
+        id = 0 
         for quiz in quiz_list:
+            for q in quiz:
+                q['type'] = 'single'
+                q['id'] = id
+                id+=1
             self.quiz_collection.extend(quiz)
+            
         return self.quiz_collection
     
     def create_video_frames(self):
@@ -249,13 +256,15 @@ class ReadingInfo(BaseModel):
                 sub_contents = re.split(r'(?=###)', section_content)
 
                 for sub_content in sub_contents:
-                    frames.append({
-                        'heading' : heading,
-                        'content' : sub_content,
-                        'metadata' : metadata
-                    })
+                    if len(sub_content)>0:
+                        frames.append({
+                            'heading' : heading,
+                            'content' : sub_content,
+                            'metadata' : metadata
+                        })
                     
         json.dump(frames, open(self.base_dir/'video_frames.json', 'w'))
+        return frames
     
 
 if __name__ == '__main__':
@@ -265,6 +274,6 @@ if __name__ == '__main__':
     y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
     pr.green(y)
     # z = asyncio.run(KB_Creator.create_quiz())
-    # # pr.yellow(z)
+    # pr.yellow(z)
     # a = KB_Creator.create_video_frames()
     

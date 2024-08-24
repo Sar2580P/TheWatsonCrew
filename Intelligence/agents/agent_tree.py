@@ -4,6 +4,7 @@ These are non-leaf tools which has several leaf or non-leaf tools under them.
 from Intelligence.agents.agent_runner import MyAgentRunner
 from Intelligence.tools.tool_instance_mappings import tool_instance_mapping as TIM
 from Intelligence.utils.misc_utils import logger
+
 MEDICAL_AGENT_1 = MyAgentRunner.from_tools(
                         tools = [TIM['diabetes_doctor_tool'.upper()], TIM['blood_pressure_doctor_tool'.upper()]],
                         description='''Useful for queries related to medical diagnosis, diseases, remedies and fitness and exercise. It has a staff of expertise in diabetes and blood pressure domains.''',
@@ -31,6 +32,6 @@ ROOT = MyAgentRunner.from_tools(
 )
 
 if __name__=='__main__':
-    ROOT.input = 'What is diabetes? What are the symptoms of high blood pressure? How can I invest in stock market?'
+    ROOT.input = 'What is diabetes? What to eat to control diabetes? Suggest me some exercises to control it.  How can I start investing in stock market? Tell me about blockchain technology.'
     instance_list = ROOT.dag_response()
     logger.critical(instance_list)

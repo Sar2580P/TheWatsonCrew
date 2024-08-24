@@ -1,0 +1,11 @@
+[
+    {
+        "tool": {
+            "thought": "Thought: Thinking about how to answer the questions",
+            "tool_input": "How can I start investing in stock market?",
+            "tool_name": "FINANCE_ADVISOR_TOOL",
+            "tool_usage_idx": 0,
+            "tool_output": "$$PREV[0]"
+        }
+    }
+]

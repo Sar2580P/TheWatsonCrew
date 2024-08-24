@@ -28,7 +28,7 @@ from Intelligence.retrieval_response.templates import translation_template
 
 # langchain utilities for llm
 from langchain_google_genai import ChatGoogleGenerativeAI
-llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=os.getenv("GEMINI_API_KEY"))
+llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=os.getenv("GEMINI_API_KEY"), temperature=0.7)
 
 
 
@@ -180,8 +180,8 @@ gen_parms = {
     "MAX_NEW_TOKENS" : 500 
 }
 
-project_id = os.environ["PROJECT_ID"]
+# project_id = os.environ["PROJECT_ID"]
 
-model = Model( model_id, credentials, gen_parms, project_id )
+# model = Model( model_id, credentials, gen_parms, project_id )
 
-print(model.generate('Write poem on Sri krishna')['results'])
+# print(model.generate('Write poem on Sri krishna')['results'])

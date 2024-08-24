@@ -321,7 +321,30 @@ class MyAgentRunner(AgentRunner):
                 node_instance.dag_response(instance_display_order)
         
         logger.debug('\n---------Completed filling all nodes--------\n')
-        return instance_display_order
+        
+        # merge consecutive calling of same tool
+        try:
+            return self.merge_same_tool_consecutive_calls(instance_display_order)
+        except Exception as e:
+            logger.error(f"Error in merging same tool consecutive calls : {e}")
+            return instance_display_order
+    
+    def merge_same_tool_consecutive_calls(self, nodes: List[Node]) -> List[Node]:
+        merged_nodes = []
+        merged_nodes.append(nodes[0])
+        last_node_idx = 0
+        for idx in range(1, len(nodes)):
+            if nodes[idx].tool_name == nodes[last_node_idx].tool_name:
+                nodes[last_node_idx].output += '\n\n' + nodes[idx].output
+                nodes[last_node_idx].metadata['external_references'].update(
+                    nodes[idx].metadata['external_references']
+                )
+                nodes[last_node_idx].metadata['sources'] = list(set(nodes[last_node_idx].metadata['sources'] + nodes[idx].metadata['sources']))
+                nodes[last_node_idx].metadata['imgs'] = list(set(nodes[last_node_idx].metadata['imgs'] + nodes[idx].metadata['imgs']))
+            else:
+                merged_nodes.append(nodes[idx])
+                last_node_idx = idx
+        return merged_nodes
     
     # def draw_dag_planning_graph(self, nodes: List[Node], **kwargs: Any):
     #     G = nx.DiGraph()
