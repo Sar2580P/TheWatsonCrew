@@ -12,7 +12,7 @@ source, name = get_user_input()
 
 # Create a pipeline instance and ingest data
 pipeline = Pipeline()
-pipeline.ingest_webdata_to_vecdb(path=f'Intelligence/data_sources/web_links/{source}', name=name)
+pipeline.ingest_webdata_to_vecdb(path=f'../Intelligence/data_sources/web_links/{source}', name=name)
 
 # Get LLM stats
 print(Settings.llm.get_stats())

@@ -27,7 +27,7 @@ class Retriever(VectorIndexRetriever):
         **kwargs: Any,
     ) -> None:
         """Initialize params."""
-        self._index =  Vec_Store.get_vectorstore(os.path.join('Intelligence/vector_stores', index_path))
+        self._index =  Vec_Store.get_vectorstore(os.path.join('../Intelligence/vector_stores', index_path))
         
         with open(config_file_path, 'r') as f:
             config = yaml.safe_load(f) if config_file_path.endswith(".yaml") else json.load(f)
@@ -160,12 +160,12 @@ class ResponseSynthesizer(BaseModel):
     
     
     
-# Ret = Retriever(config_file_path = 'Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
+# Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
 # # x = Ret.retrieve('share some details on cancer?')
 # # x = A.respond_query('share some details on cancer?')
 # # print(x)
 
-# s = ResponseSynthesizer.initialize(config_file_path='Intelligence/configs/retrieval.yaml', 
+# s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
 #                                    retriever=Ret)
 # x = s.respond_query('Symptoms of high blood pressure.')
 # logger.info(x)

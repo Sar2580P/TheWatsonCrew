@@ -1,5 +1,5 @@
-file_path : Intelligence/tools/teacher/links.txt
-base_dir : Intelligence/tools/teacher
+file_path : ../Intelligence/tools/teacher/links.txt
+base_dir : ../Intelligence/tools/teacher
 name : teacher_knowledge_base
 chunk_size : 300
 chunk_overlap : 75
