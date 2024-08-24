@@ -35,6 +35,7 @@ tzdata = "2024.1"
 pytube = "^15.0.0"
 networkx = "^3.3"
 typing-extensions = "^4.12.2"
+ibm-watson-machine-learning = "^1.0.360"
 
 
 [tool.poetry.group.dev.dependencies]

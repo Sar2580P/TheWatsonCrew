@@ -13,7 +13,7 @@ from llama_index.core.base.llms.types import CompletionResponse
 from llama_index.llms.gemini.utils import (
     chat_from_gemini_response,
     chat_message_to_gemini,
-    completion_from_gemini_response,
+    completion_from_gemini_response
 )
 from llama_index.core.base.llms.types import (
     ChatMessage,
@@ -165,3 +165,23 @@ def embed(x):
 # A comprehensive review of his medication regimen was essential to prevent potential drug interactions and ensure optimal therapeutic outcomes, given the complexity of his multiple chronic conditions.'''
 # # prompt = template.format(statement = text)
 # # print(use_llm(prompt)[0])
+
+
+credentials = { 
+    "url"    : "https://us-south.ml.cloud.ibm.com", 
+    "apikey" : os.getenv("cloud_apikey"),
+}
+from ibm_watson_machine_learning.foundation_models import Model
+
+model_id = "ibm/granite-13b-chat-v2"
+
+gen_parms = { 
+    "MIN_NEW_TOKENS" : 1, 
+    "MAX_NEW_TOKENS" : 500 
+}
+
+project_id = os.environ["PROJECT_ID"]
+
+model = Model( model_id, credentials, gen_parms, project_id )
+
+print(model.generate('Write poem on Sri krishna')['results'])
