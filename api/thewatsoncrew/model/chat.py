@@ -7,7 +7,7 @@ def llm_chat_response(message : str)-> List[Dict]:
     instance_list = ROOT.dag_response()
     response = []
     for instance in instance_list:
-        response.append({
-            'response' : instance.output
-        }.update(instance.metadata))
+        d = {'response' : instance.output}
+        d.update(instance.metadata)
+        response.append(d)
     return response
