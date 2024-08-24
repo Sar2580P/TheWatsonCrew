@@ -13,7 +13,17 @@ const BLOG_AI = [
   },
 ];
 
-const WATCH_AI = [
+interface watch_ai {
+  heading: string;
+  content: string;
+  metadata: {
+    external_references: {};
+    sources: string[];
+    imgs: string[];
+  };
+}
+
+const WATCH_AI: watch_ai[] = [
   {
     heading: "Yoga for Diabetes Management",
     content:
