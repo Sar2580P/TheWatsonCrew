@@ -82,20 +82,11 @@ const VideoSnap: React.FC<VideoSnapProps> = ({ heading, imgs, content, onEnd }) 
 
   return (
     <div className={classes["container"]}>
-      {imgs && (
-        <Image
-          src="/robot.jpg"
-          alt="video snap"
-          width={960}
-          height={540}
-          loader={({ src }) => {
-            if (imgs.length > 0) {
-              return imgs[Math.floor(Math.random() * imgs.length)];
-            }
-            return src;
-          }}
-        />
-      )}
+      <div className={classes["images"]}>
+        {imgs.map((img, index) => (
+          <Image key={index} src="/robot.jpg" alt={img} width={280} height={180} loader={({ src }) => img} />
+        ))}
+      </div>
       <div className={classes["video-container"]}>
         <h2>{heading}</h2>
         <video autoPlay loop muted playsInline src="/video.mp4"></video>

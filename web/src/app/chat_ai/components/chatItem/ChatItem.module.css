@@ -84,7 +84,7 @@
   padding: 0;
   color: var(--white-color);
   display: block;
-  width: 100%;
+  width: -webkit-fill-available;
   text-align: left;
 }
 .message h1 {
@@ -110,26 +110,26 @@
   padding-left: 0.75rem;
   margin: 0;
   display: block;
-  width: 100%;
+  width: -webkit-fill-available;
 }
 .message ul li {
   margin: 0;
   padding: 0.15rem 0.5rem;
   display: block;
-  width: 100%;
+  width: -webkit-fill-available;
   text-align: left;
 }
 .message p {
   margin: 0;
   padding: 0;
   display: block;
-  width: 100%;
+  width: -webkit-fill-available;
   text-align: left;
 }
 .message a {
   color: var(--primary-color);
   text-decoration: underline;
-  width: 100%;
+  width: -webkit-fill-available;
   text-align: left;
 }
 .message a:hover {
@@ -144,4 +144,5 @@
   gap: 1rem;
   color: var(--light-white-color);
   font-size: 0.6rem;
+  width: -webkit-fill-available;
 }

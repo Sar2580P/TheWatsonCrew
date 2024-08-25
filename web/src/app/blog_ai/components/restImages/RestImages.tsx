@@ -2,7 +2,11 @@ import React from "react";
 import Image from "next/image";
 import classes from "@/app/blog_ai/components/restImages/RestImages.module.css";
 
+const urlRegex = new RegExp("^(http|https)://[^\\s/$.?#].[^\\s]*$", "i");
+
 const RestImages = ({ restImages }: { restImages: string[] }) => {
+  restImages = restImages.filter(img => urlRegex.test(img));
+
   return (
     <div className={classes["container"]}>
       <h1>Blog All Images</h1>

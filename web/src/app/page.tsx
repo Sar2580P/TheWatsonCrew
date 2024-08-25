@@ -1,10 +1,12 @@
 import classes from "@/styles/page.module.css";
 import Links from "@/components/components/links/Links";
 import AddLink from "@/components/components/addLink/AddLink";
+import FallingWhiteCrystalsCanvas from "@/components/components/fallingWhiteCrystalsCanvas/FallingWhiteCrystalsCanvas";
 
 export default function Home() {
   return (
     <div className={classes.container}>
+      <FallingWhiteCrystalsCanvas />
       <div className={classes.box}>
         <h1>
           AI-driven app with smart navigation, interactive chatbot, insightful videos, and personalized assessments.
