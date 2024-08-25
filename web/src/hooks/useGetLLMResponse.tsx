@@ -29,7 +29,7 @@ const useGetLLMResponse = () => {
     } catch (err) {
       console.log(err);
       setLoading(false);
-      NotificationHandler("The Watson Crew", "Something went wrong", "Error");
+      // NotificationHandler("The Watson Crew", "Something went wrong", "Error");
       return null;
     }
   };
