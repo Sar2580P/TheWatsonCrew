@@ -8,6 +8,7 @@ import useGetLLMResponse from "@/hooks/useGetLLMResponse";
 import LoadingComponent from "@/components/Loading/Loading";
 import Result from "@/app/evaluate_ai/components/result/Result";
 import classes from "@/app/evaluate_ai/components/questions/Questions.module.css";
+import CelebrateResultCanvas from "@/app/evaluate_ai/components/celebrateResultCanvas/CelebrateResultCanvas";
 
 const Questions = () => {
   const {
@@ -122,13 +123,16 @@ const Questions = () => {
         </div>
       ))}
       {isQuizCompleted && (
-        <Result
-          heading="Test Result 🎉"
-          data={quizResult}
-          onClose={() => {
-            onQuizCompleted(false);
-          }}
-        />
+        <>
+          <CelebrateResultCanvas />
+          <Result
+            heading="Test Result 🎉"
+            data={quizResult}
+            onClose={() => {
+              onQuizCompleted(false);
+            }}
+          />
+        </>
       )}
     </div>
   );

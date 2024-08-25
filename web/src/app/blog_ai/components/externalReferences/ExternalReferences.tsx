@@ -1,8 +1,12 @@
 import React from "react";
 import classes from "@/app/blog_ai/components/externalReferences/ExternalReferences.module.css";
 
+const urlRegex = new RegExp("^(http|https)://[^\\s/$.?#].[^\\s]*$", "i");
+
 const ExternalReferences = ({ externalReferences }: any) => {
-  const keys = Object.keys(externalReferences).slice(0, 10);
+  const keys = Object.keys(externalReferences)
+    .filter(key => urlRegex.test(externalReferences[key]))
+    .slice(0, 10);
 
   return (
     <div className={classes["container"]}>
