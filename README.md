@@ -100,17 +100,29 @@ So as to run our project locally, you need to follow the steps below.
 
 ## Description
 
-The Learning App is designed to provide a personalized educational experience.</br>
+The Learning App is designed to provide a personalized educational experience. Users can input links to resources they want to learn from, and the LLM will update its knowledge base accordingly. The app offers various features, including reading generated pages, learning through video lectures, taking tests, and chatting with the AI.
+
+</br>
 
 ## Problem
 
+![0](./image/0.png)
+
 ## Solution
+
+![1](./image/1.png)
 
 ## Approach
 
-## A Tool for Personalized Learning
+![2](./image/2.png)
 
-## Key Features
+## App Features
+
+![3](./image/3.png)
+
+## Technologies Used
+
+![4](./image/4.png)
 
 ## Pages Overview
 
@@ -133,6 +145,7 @@ The Learning App is designed to provide a personalized educational experience.</
 ### Chat AI
 
 ![Chat](./image/9.png)
+![Chat](./image/10.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
