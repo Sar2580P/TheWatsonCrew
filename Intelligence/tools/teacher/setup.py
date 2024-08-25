@@ -21,6 +21,7 @@ import asyncio
 import ast, json, re
 from collections import defaultdict
 from collections import OrderedDict
+import hdbscan
 
 class ReadingInfo(BaseModel):
     config : Dict = None
@@ -45,14 +46,14 @@ class ReadingInfo(BaseModel):
         return instance
     
     def create_knowledgebase(self , web_links:List[str]=None)-> Dict[int, List[Document]]:
-        if not web_links:
+        if  not web_links:
             logger.debug('No web-links provided, using default from links.txt')
             web_links = [w.strip() for w in open(self.file_path, 'r').readlines()]
 
 
         unsuccessful_trials , final_docs = [] , {}
         src_label = 0
-        
+        pr.red(web_links)
         for link in tqdm(web_links, desc='Scraping links'):
             self.scrapper.url = link
             try : 
@@ -88,7 +89,9 @@ class ReadingInfo(BaseModel):
                 doc.metadata['document_label'] = label   # the label corresponds to the url from which the document was scraped
                 final_docs.append(doc)
                 rank+=1
-            
+        pr.red(len(final_docs))   
+        pr.red(len(labelled_docs[0]))
+        pr.red(len(labelled_docs[1]))
         return transform_pipeline.run_ingestion(final_docs)
 
 
@@ -96,20 +99,44 @@ class ReadingInfo(BaseModel):
         logger.debug('Clustering the information chunks ...')
         embedded_nodes = self.create_embeddings(web_links=web_links)
 
+        
         # Step 2: Perform DBScan clustering
         embeddings = np.array([node.embedding for node in tqdm(embedded_nodes, 
-                                                               desc='Assembling embeddings for clustering')])
-
+                                                            desc='Assembling embeddings for clustering')])
+        
+        from sklearn.preprocessing import StandardScaler
+        scaler = StandardScaler()
+        embeddings = scaler.fit_transform(embeddings)
+        
         # Step 2: Dimensionality Reduction (Optional but recommended)
-        pca = PCA(n_components=self.config['n_components'] ,whiten=self.config['whiten'])  # Reduce to 50 dimensions
+        pca = PCA(n_components=self.config['n_components'] ,whiten=self.config['whiten'], random_state=42)  # Reduce to 50 dimensions
         reduced_embeddings = pca.fit_transform(embeddings)
+        
+        # tsne = TSNE(n_components=self.config['n_components'], 
+        #     perplexity=self.config.get('perplexity', 30),
+        #     learning_rate=self.config.get('learning_rate', 50),
+        #     n_iter=self.config.get('n_iter', 1000),
+        #     random_state=self.config.get('random_state', 42),
+        #     method='exact')
 
-        # Step 3: Clustering (DBSCAN)
-        clustering = DBSCAN(eps=self.config['eps'], min_samples=self.config['min_samples'], 
-                            metric=self.config['metric']).fit(reduced_embeddings)
+        # reduced_embeddings = tsne.fit_transform(embeddings)
+
+        
+        # Step 3: Clustering (HDBSCAN)
+        clustering = hdbscan.HDBSCAN(min_cluster_size=self.config['min_cluster_size'],
+                                    min_samples=self.config.get('min_samples', None),  # Optional: can be None
+                                    metric=self.config.get('metric', 'euclidean'),
+                                    cluster_selection_epsilon=self.config.get('cluster_selection_epsilon', 0.0),
+                                    cluster_selection_method=self.config.get('cluster_selection_method', 'eom'), 
+                                    ).fit(reduced_embeddings)
 
         # Step 3: Create DataFrame for clustering results
         labels = clustering.labels_
+
+        # Optional: If you want to store additional results like probabilities
+        probabilities = clustering.probabilities_
+        pr.green(probabilities)
+        pr.purple(labels)
         ids = range(len(embedded_nodes))
         ranks = [node.metadata['rank'] for node in embedded_nodes]
         source_labels = [node.metadata['document_label'] for node in embedded_nodes]
@@ -129,21 +156,21 @@ class ReadingInfo(BaseModel):
         df.to_csv(save_path, index=False)
         logger.debug(f"clustering CSV file saved: {save_path}")
 
-        # tsne_embedded = TSNE(n_components=3, random_state=42).fit_transform(reduced_embeddings)
+        tsne_embedded = TSNE(n_components=3, random_state=42).fit_transform(reduced_embeddings)
         
-        # fig = plt.figure(figsize=(12, 10))
-        # ax = fig.add_subplot(111, projection='3d')
-        # scatter = ax.scatter(tsne_embedded[:, 0], tsne_embedded[:, 1], tsne_embedded[:, 2], c=labels, cmap='viridis', alpha=0.5)
+        fig = plt.figure(figsize=(12, 10))
+        ax = fig.add_subplot(111, projection='3d')
+        scatter = ax.scatter(tsne_embedded[:, 0], tsne_embedded[:, 1], tsne_embedded[:, 2],c=labels , cmap='viridis', alpha=0.5)
         
-        # ax.set_title('3D TSNE Plot of Clustering')
-        # ax.set_xlabel('TSNE Component 1')
-        # ax.set_ylabel('TSNE Component 2')
-        # ax.set_zlabel('TSNE Component 3')
+        ax.set_title('3D TSNE Plot of Clustering')
+        ax.set_xlabel('TSNE Component 1')
+        ax.set_ylabel('TSNE Component 2')
+        ax.set_zlabel('TSNE Component 3')
         
-        # legend1 = ax.legend(*scatter.legend_elements(), title="Clusters")
-        # ax.add_artist(legend1)
+        legend1 = ax.legend(*scatter.legend_elements(), title="Clusters")
+        ax.add_artist(legend1)
         
-        # plt.savefig(self.base_dir/'clustering_tsne_plot_3d.png')
+        plt.savefig(self.base_dir/'clustering_tsne_plot_3d.png')
 
     
     def ordering_content(self, df:pd.DataFrame)->Tuple[List ,List]:
@@ -196,26 +223,24 @@ class ReadingInfo(BaseModel):
 
             note = Settings.llm.complete(full_prompt).text.strip()
             return note
-        # try:
-        pr.purple(len(self.content))
-        # Create a list of tasks for asynchronous fetching of notes
-        tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
-        
-        # Await the completion of all tasks
-        self.aggregated_notes_collection = await asyncio.gather(*tasks)
-        response = []
-        for note, metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
-            d = {"text" : note}
-            d.update(metadata)
-            response.append(d)
+        try:
+            # Create a list of tasks for asynchronous fetching of notes
+            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
             
-        # with open('../output.json', 'w') as json_file:
-        #     json.dump(response, json_file, indent=4)
-        print(response , '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-        return response
-        # except Exception as e:
-        #     logger.error(str(e))
-        #     return
+            # Await the completion of all tasks
+            self.aggregated_notes_collection = await asyncio.gather(*tasks)
+            response = []
+            for note, metadata in zip(self.aggregated_notes_collection, self.aggregate_metadata_collection):
+                d = {"text" : note}
+                d.update(metadata)
+                response.append(d)
+                
+            # with open('../output.json', 'w') as json_file:
+            #     json.dump(response, json_file, indent=4)
+            return response
+        except Exception as e:
+            logger.error(str(e))
+            return
             
     
     async def create_quiz(self) -> List[Dict]:
@@ -269,10 +294,10 @@ class ReadingInfo(BaseModel):
 
 if __name__ == '__main__':
     KB_Creator = ReadingInfo.from_config(config_path='../Intelligence/configs/tools/teacher.yaml')
-    # w = KB_Creator.get_clustering()
-    x = KB_Creator.ordering_content(pd.read_csv('../Intelligence/tools/teacher/clustering_results.csv'))
-    y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
-    pr.green(y)
+    # KB_Creator.get_clustering()
+    # x = KB_Creator.ordering_content(pd.read_csv('../Intelligence/tools/teacher/clustering_results.csv'))
+    # y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
+    # pr.green(y)
     # z = asyncio.run(KB_Creator.create_quiz())
     # pr.yellow(z)
     # a = KB_Creator.create_video_frames()

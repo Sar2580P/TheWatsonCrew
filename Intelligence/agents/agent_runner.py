@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 import json
 from langchain.agents.output_parsers.react_single_input import ReActSingleInputOutputParser
 from Intelligence.dag_planner.agent import PersonalAgent
-from Intelligence.utils.llm_utils import Settings, llm as langchain_llm
+from Intelligence.utils.llm_utils import Settings, ibm_llm_lc as langchain_llm, ibm_llm
 import os, glob
 
 class MyAgentRunner(AgentRunner):
@@ -167,7 +167,7 @@ class MyAgentRunner(AgentRunner):
         if callback_manager is not None:
             llm.callback_manager = callback_manager
         memory = memory or memory_cls.from_defaults(
-            chat_history=chat_history or [], llm=llm
+            chat_history=chat_history or [], llm=Settings.llm
         )
         return cls(
             tools=tools or [],
@@ -292,7 +292,7 @@ class MyAgentRunner(AgentRunner):
         )
     
     def dag_response(self, instance_display_order:List[Node] = [],  **kwargs: Any) -> List[Node]:
-        self.dag_agent_worker({'input' : self.input})
+        # self.dag_agent_worker({'input' : self.input})
         dag_setup = self.create_graph_from_nodes_json(f'../Intelligence/dag_planner/planning/{self.name}_planning.json')
         logger.debug('\n---------Filling nodes topo-bfs manner--------\n')
         # applying topo-bfs starting with nodes having 0 indegree

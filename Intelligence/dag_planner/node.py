@@ -59,7 +59,7 @@ class Node(BaseModel):
                 raise ValueError(f"Parent node with index {parent_idx} not found in mapping.")
         return self.tool_input
 
-    async def run_node(self):
+    def run_node(self):
         # Reframe the entire input query using the LLM
         # final_query_prompt = llm.reframe_query(self.create_prompt())
         final_query_prompt = self.create_prompt()

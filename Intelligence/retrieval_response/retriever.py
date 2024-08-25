@@ -4,19 +4,18 @@ import json, os
 from llama_index.core.retrievers import VectorIndexRetriever
 from Intelligence.node_processing.store import Vec_Store
 from llama_index.core import get_response_synthesizer
-from Intelligence.utils.misc_utils import logger, pr
-from Intelligence.retrieval_response.templates import text_qa_template, refine_template, translation_template
+from Intelligence.utils.misc_utils import logger
+from Intelligence.retrieval_response.templates import text_qa_template, refine_template
 from llama_index.core import PromptTemplate
 from llama_index.core.postprocessor import SimilarityPostprocessor, TimeWeightedPostprocessor
 from llama_index.core.query_engine.retriever_query_engine import RetrieverQueryEngine
 from collections import defaultdict
 from llama_index.core.schema import NodeWithScore
 import yaml
-from Intelligence.utils.llm_utils import Settings
+from Intelligence.utils.llm_utils import ibm_llm
 from llama_index.core import  VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.response_synthesizers.factory import BaseSynthesizer
-from llama_index.retrievers.bm25 import BM25Retriever
 import warnings
 
 # Suppress specific deprecation warnings
@@ -92,7 +91,7 @@ class ResponseSynthesizer(BaseModel):
         refine_prompt = PromptTemplate(refine_template).partial_format(tone_name=response_tone)
         
         self.response_synthesizer = get_response_synthesizer(
-            llm=Settings.llm , 
+            llm=ibm_llm, 
             text_qa_template=text_qa_prompt,
             refine_template=refine_prompt,
             # use_async=False,
@@ -117,8 +116,8 @@ class ResponseSynthesizer(BaseModel):
             
         self.query_engine = RetrieverQueryEngine(
                                 retriever=self.retriever,  # passing retriever object itself
-                                # response_synthesizer=self.response_synthesizer,
                                 node_postprocessors=self.node_post_processors,
+                                response_synthesizer=self.response_synthesizer,
                             )
         
     def respond_query(self, query:str)-> Tuple[str, Dict[str, Union[List, str]]]:
@@ -174,8 +173,6 @@ class ResponseSynthesizer(BaseModel):
     
 
 if __name__=='__main__':
-    import asyncio   
-    import time
     Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
     # x = Ret.retrieve('share some details on cancer?')
     # x = A.respond_query('share some details on cancer?')
@@ -183,26 +180,5 @@ if __name__=='__main__':
 
     s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
                                     retriever=Ret)
-    async def main():
-        # Creating the list of coroutines without calling them directly
-        x = [
-            s.arespond_query('Symptoms of high blood pressure.'),
-            s.arespond_query('Symptoms of high blood pressure.'),
-            s.arespond_query('Symptoms of high blood pressure.')
-        ]
-        
-        y = await asyncio.gather(*x)  # Await the gathered coroutines
-        return y
-
-    # start = time.time()
-    # # Run the async main function
-    # y = asyncio.run(main())
-
-    # print('Time taken : ', time.time()-start)   
-    start = time.time()
-    s.respond_query('Symptoms of high blood pressure.')
-    # x = [s.respond_query('Symptoms of high blood pressure.'),s.respond_query('Symptoms of high blood pressure.'),s.respond_query('Symptoms of high blood pressure.')]
-    print('Time taken : ', time.time()-start)
-
-
-
+    a = s.respond_query('Symptoms of high blood pressure.')
+    print(a)

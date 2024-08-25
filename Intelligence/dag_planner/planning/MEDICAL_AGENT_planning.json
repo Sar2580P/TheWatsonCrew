@@ -1,29 +1,23 @@
 [
     {
-        "tool": {
-            "thought": "Thought: The question is about diabetes, so I should use DIABETES_DOCTOR_TOOL.",
-            "tool_input": "What is diabetes?",
-            "tool_name": "DIABETES_DOCTOR_TOOL",
-            "tool_usage_idx": 0,
-            "tool_output": "$$PREV[0]"
-        }
-    },
+        "thought" : "" ,
+        "tool_input" : "What is diabetes? " ,
+        "tool_name": "diabetes_doctor_tool",
+        "tool_usage_idx" : 0,
+        "tool_output": "$$PREV[0]"
+    }      ,
     {
-        "tool": {
-            "thought": "The question is still not answered completely.",
-            "tool_input": "What to eat to control diabetes?",
-            "tool_name": "DIABETES_DOCTOR_TOOL",
-            "tool_usage_idx": 1,
-            "tool_output": "$$PREV[1]"
-        }
-    },
+        "thought" : "" ,
+        "tool_input" : "Tell about exercises to control diabetes. " ,
+        "tool_name": "diabetes_doctor_tool",
+        "tool_usage_idx" : 1 ,
+        "tool_output": "$$PREV[1]"
+    }      ,
     {
-        "tool": {
-            "thought": "The question is still not answered completely.",
-            "tool_input": "Suggest me some exercises to control it.",
-            "tool_name": "DIABETES_DOCTOR_TOOL",
-            "tool_usage_idx": 2,
-            "tool_output": "$$PREV[2]"
-        }
-    }
+        "thought" : "" ,
+        "tool_input" : "What are the symptoms of high blood pressure? " ,
+        "tool_name": "blood_pressure_doctor_tool",
+        "tool_usage_idx" : 2,
+        "tool_output": "$$PREV[2]"
+    }             
 ]

@@ -10,6 +10,7 @@ from typing import Union, List
 from collections import defaultdict 
 from Intelligence.utils.misc_utils import logger, assert_
 import re 
+from urllib.parse import urljoin
 
 class Web_Scrapper : 
     def __init__(self, url:str = 'hello.com'):
@@ -66,17 +67,23 @@ class Web_Scrapper :
                 chunk['url'] = element.get('href', '')  # Use .get() to handle missing 'href' attribute
                 
             # If it's an image/ video, iframe
-            elif element.name ==  'img':
+            elif element.name ==  'img' :
                 chunk['type'] = 'image'
                 chunk['description'] = element.get('alt', '')   # Use .get() to handle missing 'alt' attribute
-                chunk['source'] = element.get('src', '')  # Use .get() to handle missing 'src' attribute
-            
+                img_url = element.get('src', '')  # Use .get() to handle missing 'src' attribute
+                if  bool(re.match(r"^(?!https?:\/\/).+",  element.get('src', ''))):
+                    img_url = urljoin(self.url, img_url)
+                chunk['source'] = img_url
+                
             if len(chunk)>0:
                 self.chunks.append(chunk)
         
         return self.chunks
 
     def create_dict(self):
+        '''
+        Grouping the location index of each type of tag in the chunks array.
+        '''
         self.scrape_blog()
         self.blog_dict = defaultdict(list)
         
@@ -102,7 +109,7 @@ class Web_Scrapper :
         li = self.blog_dict['paragraph']
         for idx in li:
             if self.chunks[idx]['content'] != '':
-                start = idx+1
+                start = idx
                 break
         
         # Pattern-3
@@ -115,10 +122,10 @@ class Web_Scrapper :
             else :
                 end = li[i+1]-1 if i+1 < len(li) else end
                 break
-            
+        
         # updating the bounds of each type of tag in self.chunks
         self.bound_dict = {}
-        logger.info(f'bounds : {start} , {end}')
+        logger.debug(f'bounds : ({start} , {end})')
         for key in self.blog_dict.keys():
             li = self.blog_dict[key]
             # logger.critical(f'key : {key} , li : {li}')
@@ -146,9 +153,10 @@ class Web_Scrapper :
             
         combined_indices =  (self.blog_dict['paragraph'][self.bound_dict['paragraph'][0]:self.bound_dict['paragraph'][1]+1] if 'paragraph' in self.blog_dict else []) + \
                             (self.blog_dict['list'][self.bound_dict['list'][0]:self.bound_dict['list'][1]+1] if 'list' in self.blog_dict else [])
+        print(len(combined_indices) , end = '\t\t')
         combined_indices = self.remove_too_small_texts(sorted(combined_indices))
-
-        img_idxs = (self.blog_dict['image'][self.bound_dict['image'][0]+2:self.bound_dict['image'][1]] if 'image' in self.blog_dict else [])
+        print(len(combined_indices))
+        img_idxs = (self.blog_dict['image'][self.bound_dict['image'][0]:self.bound_dict['image'][1]+1] if 'image' in self.blog_dict else [])
         link_idxs = (self.blog_dict['hyperlink'][self.bound_dict['hyperlink'][0]:self.bound_dict['hyperlink'][1]+1] if 'hyperlink' in self.blog_dict else [])
         caption_idxs = (self.blog_dict['caption'][self.bound_dict['caption'][0]:self.bound_dict['caption'][1]+1] if 'caption' in self.blog_dict else [])    
         
@@ -201,7 +209,7 @@ class Web_Scrapper :
         return list_of_docs
             
             
-    def remove_too_small_texts(self, combined_indices:list, word_threshold = 30):
+    def remove_too_small_texts(self, combined_indices:list, word_threshold = 15):
         new_combined_indices = []
         less_words_string = ''
         for idx in combined_indices:
@@ -222,7 +230,7 @@ class Web_Scrapper :
         
         
 if __name__=='__main__':    
-    scr = Web_Scrapper('https://towardsdatascience.com/transformers-141e32e69591')
+    scr = Web_Scrapper('https://towardsdatascience.com/test-time-augmentation-tta-and-how-to-perform-it-with-keras-4ac19b67fb4d')
     d = scr.create_docs()      
     logger.critical(d)
 
