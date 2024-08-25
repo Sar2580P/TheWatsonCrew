@@ -32,7 +32,7 @@ const usePostLLMResponse = () => {
     } catch (err) {
       setLoading(false);
       console.log(err);
-      NotificationHandler("The Watson Crew", "Something went wrong", "Error");
+      // NotificationHandler("The Watson Crew", "Something went wrong", "Error");
       return null;
     }
   };
