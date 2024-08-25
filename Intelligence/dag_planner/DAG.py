@@ -50,7 +50,7 @@ class CustomAgentExecutor(AgentExecutor):
         # updating the prompt with the user query
         self.agent.llm_chain.prompt = self.agent.create_prompt(tools = self.tools, 
                                                                user_query=inputs['input'])
-
+        pr.yellow(f'Prompt : {self.agent.llm_chain.prompt}')
         while self._should_continue(iterations, time_elapsed):
             
             next_step_output = self._take_next_step(
@@ -259,8 +259,12 @@ class CustomAgentExecutor(AgentExecutor):
 
 #____________________________________________________________________________________________________
 
-
+# agent_executor = CustomAgentExecutor(agent='DATABASE_AGENT_1')
 # a =  agent_executor({"input":'Get all work items similar to TKT-123, summarize them, create issues from that summary, and prioritize them '})
-# a =  agent_executor({"input":'Summarise work item TKT-123'})
+# # a =  agent_executor({"input":'Summarise work item TKT-123'})
 
 # print(a)
+
+# if __name__=='__main__':
+#     from Intelligence.dag_planner.agent import PersonalAgent
+#     agent = PersonalAgent.from_llm_and_tools(llm = Settings.llm, tools = [TIM['get_similar_work_items_tool'.upper()], TIM['summarize_objects_tool'.upper()],

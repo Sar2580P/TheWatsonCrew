@@ -20,6 +20,7 @@ class Pipeline:
                 # TitleExtractor(),
                 # DescriptiveKeywords(seperator='__', 
                 #                     index = Vec_Store.get_vectorstore(path = 'vector_stores/descriptive_prefixes')),
+                QuestionsAnsweredExtractor() , 
                 Settings.embed_model,
             ]
         )
