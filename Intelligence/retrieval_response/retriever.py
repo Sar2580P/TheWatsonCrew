@@ -4,20 +4,22 @@ import json, os
 from llama_index.core.retrievers import VectorIndexRetriever
 from Intelligence.node_processing.store import Vec_Store
 from llama_index.core import get_response_synthesizer
-from Intelligence.utils.misc_utils import logger, pr
-from Intelligence.retrieval_response.templates import text_qa_template, refine_template, translation_template
+from Intelligence.utils.misc_utils import logger
+from Intelligence.retrieval_response.templates import text_qa_template, refine_template
 from llama_index.core import PromptTemplate
 from llama_index.core.postprocessor import SimilarityPostprocessor, TimeWeightedPostprocessor
 from llama_index.core.query_engine.retriever_query_engine import RetrieverQueryEngine
 from collections import defaultdict
 from llama_index.core.schema import NodeWithScore
 import yaml
-from Intelligence.utils.llm_utils import Settings
+from Intelligence.utils.llm_utils import ibm_llm
 from llama_index.core import  VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.response_synthesizers.factory import BaseSynthesizer
-from llama_index.retrievers.bm25 import BM25Retriever
+import warnings
 
+# Suppress specific deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="langchain.memory")
 class Retriever(VectorIndexRetriever):    
     def __init__(
         self,
@@ -89,7 +91,7 @@ class ResponseSynthesizer(BaseModel):
         refine_prompt = PromptTemplate(refine_template).partial_format(tone_name=response_tone)
         
         self.response_synthesizer = get_response_synthesizer(
-            llm=Settings.llm , 
+            llm=ibm_llm, 
             text_qa_template=text_qa_prompt,
             refine_template=refine_prompt,
             # use_async=False,
@@ -114,13 +116,14 @@ class ResponseSynthesizer(BaseModel):
             
         self.query_engine = RetrieverQueryEngine(
                                 retriever=self.retriever,  # passing retriever object itself
-                                # response_synthesizer=self.response_synthesizer,
                                 node_postprocessors=self.node_post_processors,
+                                response_synthesizer=self.response_synthesizer,
                             )
         
     def respond_query(self, query:str)-> Tuple[str, Dict[str, Union[List, str]]]:
         self.get_query_engine()
         try:
+            # response = asyncio.run(self.query_engine.aquery(query))
             response = self.query_engine.query(query)
             logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
             aggregated_metadata = self.aggregate_metadata(response.source_nodes)
@@ -129,6 +132,16 @@ class ResponseSynthesizer(BaseModel):
             logger.error(e)
             return 'Sorry, I could not find any relevant information.' , {}
         
+    async def arespond_query(self, query: str) -> Tuple[str, Dict[str, Union[List, str]]]:
+        self.get_query_engine()  # Assuming this might be an async operation too
+        try:
+            response = await self.query_engine.aquery(query)  # Using async query
+            logger.debug(f'Extracted {len(response.source_nodes)} similar nodes')
+            aggregated_metadata = self.aggregate_metadata(response.source_nodes)
+            return response.response, aggregated_metadata
+        except Exception as e:
+            logger.error(e)
+            return 'Sorry, I could not find any relevant information.', {}    
 
     def aggregate_metadata(self, nodes: List[NodeWithScore]):
         '''
@@ -158,15 +171,14 @@ class ResponseSynthesizer(BaseModel):
         # logger.debug(f'Aggregated metadata : {agg_metadata}')
         return agg_metadata
     
-    
-    
-# Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
-# # x = Ret.retrieve('share some details on cancer?')
-# # x = A.respond_query('share some details on cancer?')
-# # print(x)
 
-# s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
-#                                    retriever=Ret)
-# x = s.respond_query('Symptoms of high blood pressure.')
-# logger.info(x)
+if __name__=='__main__':
+    Ret = Retriever(config_file_path = '../Intelligence/configs/retrieval.yaml', index_path = 'blood_pressure_medical_db')
+    # x = Ret.retrieve('share some details on cancer?')
+    # x = A.respond_query('share some details on cancer?')
+    # print(x)
 
+    s = ResponseSynthesizer.initialize(config_file_path='../Intelligence/configs/retrieval.yaml', 
+                                    retriever=Ret)
+    a = s.respond_query('Symptoms of high blood pressure.')
+    print(a)

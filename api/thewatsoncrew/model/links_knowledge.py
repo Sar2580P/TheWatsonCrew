@@ -18,8 +18,9 @@ def llm_insight_ai_data():
 
 def llm_converse_ai_readme():
     # return CONERSE_AI
-    
+    print('Helloe world')
     response =  asyncio.run(KB_Creator.create_notes())
+    print(response , '-------------------------------------------------')
     return response
     
     

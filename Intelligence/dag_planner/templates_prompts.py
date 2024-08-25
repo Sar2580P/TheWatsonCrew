@@ -13,16 +13,18 @@ Steps Taken: {agent_scratchpad}"""
 FORMAT_INSTRUCTIONS_DAG = '''
 Use the following format--->
 
-Question: the input question you must answer
-Thought: you should always think about what to do
+Thought: reasoning out the next logical step to solve the question
 Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action, pass in the query in natural language
-Observation: $$PREV[i], representing the output of the ith action
-    ... (this Thought/ Action/ Action Input/ Observation can repeat N times)
+
+OR
 
 Thought: Thinking whether the sequence of action input represent the question correctly
 Final Answer: Decision to conclude the iterations
 ------------------------------------------------------------
+INSTRUCTIONS:
+- You just need to provide the set of (Thought, Action, Action Input) for the next step.
+- Just return the next step, not the complete plan.
 '''
 
 #____________________________________________________________________________________________________________
@@ -35,7 +37,7 @@ QUESTION : the input question you must answer
 THOUGHT : first create a logic to solve the problem based on tools available
 ACTION : the action to take, should be one of [{tool_names}]
 ACTION INPUT : the input to the action
-OBSERVATION : the result of the action
+OBSERVATION : the output of the action, believe that $$PREV[i] answers the ith action input
     ...... (this THOUGHT/ ACTION/ ACTION INPUT/ OBSERVATION can repeat N times)
 
 

@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 import json
 from langchain.agents.output_parsers.react_single_input import ReActSingleInputOutputParser
 from Intelligence.dag_planner.agent import PersonalAgent
-from Intelligence.utils.llm_utils import Settings, llm as langchain_llm
+from Intelligence.utils.llm_utils import Settings, ibm_llm_lc as langchain_llm, ibm_llm
 import os, glob
 
 class MyAgentRunner(AgentRunner):
@@ -167,7 +167,7 @@ class MyAgentRunner(AgentRunner):
         if callback_manager is not None:
             llm.callback_manager = callback_manager
         memory = memory or memory_cls.from_defaults(
-            chat_history=chat_history or [], llm=llm
+            chat_history=chat_history or [], llm=Settings.llm
         )
         return cls(
             tools=tools or [],
@@ -292,7 +292,7 @@ class MyAgentRunner(AgentRunner):
         )
     
     def dag_response(self, instance_display_order:List[Node] = [],  **kwargs: Any) -> List[Node]:
-        self.dag_agent_worker({'input' : self.input})
+        # self.dag_agent_worker({'input' : self.input})
         dag_setup = self.create_graph_from_nodes_json(f'../Intelligence/dag_planner/planning/{self.name}_planning.json')
         logger.debug('\n---------Filling nodes topo-bfs manner--------\n')
         # applying topo-bfs starting with nodes having 0 indegree
@@ -321,7 +321,30 @@ class MyAgentRunner(AgentRunner):
                 node_instance.dag_response(instance_display_order)
         
         logger.debug('\n---------Completed filling all nodes--------\n')
-        return instance_display_order
+        
+        # merge consecutive calling of same tool
+        try:
+            return self.merge_same_tool_consecutive_calls(instance_display_order)
+        except Exception as e:
+            logger.error(f"Error in merging same tool consecutive calls : {e}")
+            return instance_display_order
+    
+    def merge_same_tool_consecutive_calls(self, nodes: List[Node]) -> List[Node]:
+        merged_nodes = []
+        merged_nodes.append(nodes[0])
+        last_node_idx = 0
+        for idx in range(1, len(nodes)):
+            if nodes[idx].tool_name == nodes[last_node_idx].tool_name:
+                nodes[last_node_idx].output += '\n\n' + nodes[idx].output
+                nodes[last_node_idx].metadata['external_references'].update(
+                    nodes[idx].metadata['external_references']
+                )
+                nodes[last_node_idx].metadata['sources'] = list(set(nodes[last_node_idx].metadata['sources'] + nodes[idx].metadata['sources']))
+                nodes[last_node_idx].metadata['imgs'] = list(set(nodes[last_node_idx].metadata['imgs'] + nodes[idx].metadata['imgs']))
+            else:
+                merged_nodes.append(nodes[idx])
+                last_node_idx = idx
+        return merged_nodes
     
     # def draw_dag_planning_graph(self, nodes: List[Node], **kwargs: Any):
     #     G = nx.DiGraph()

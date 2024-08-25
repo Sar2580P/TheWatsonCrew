@@ -11,6 +11,37 @@ from langchain.chains.llm import LLMChain
 from Intelligence.utils.llm_utils import llm
 from Intelligence.utils.misc_utils import logger
 
+template = '''
+Below are the tools in your toolkit along with their descriptions to help you decide on tool choice.
+
+MEDICAL_AGENT: Useful for queries related to medical diagnosis, diseases, remedies, and fitness and exercise. It has expertise in diabetes and blood pressure domains.
+FINANCIAL_AGENT: Useful for queries related to the stock market, cryptocurrency, and financial literacy.
+
+Use the following format:
+
+Question    : The query to be answered.
+Thought     : Based on the scratchpad, just tell the logic for the next step to be taken.
+Action      : The action to take, should be one of [MEDICAL_AGENT, FINANCIAL_AGENT]
+Action Input: The input to the action, pass in the query in natural language, representing the subtask to be performed by the picked tool.
+Observation : $$PREV[i], representing the output of the ith action, believe that $$PREV[i] answers the ith action input.
+    
+...(this Thought/Action/Action Input/Observation can repeat N times)
+
+Final Thought: Review the sequence of actions to ensure they correctly represent the steps needed to answer the question. Do not conclude the answer.
+------------------------------------------------------------
+
+Your task is to only plan the very next step based on the Question, Tools, and agent scratchpad. Do not answer the question or generate the full plan in one go. Only provide the next Thought, Action, Action Input, and Observation based on the context provided.
+
+Begin!
+
+Question : {input}
+
+Steps Taken: {agent_scratchpad}
+
+Next Step:
+
+
+'''
 class PersonalAgent(ZeroShotAgent):
     
 
