@@ -18,7 +18,12 @@ type ChatItemProps = {
 
 const ChatItem: React.FC<ChatItemProps> = ({ message, user }) => {
   return (
-    <div className={classes["container"]}>
+    <div
+      className={classes["container"]}
+      style={{
+        alignSelf: user === "bot" ? "flex-end" : "flex-start",
+      }}
+    >
       <div className={`${classes["message-box"]} ${classes[user]}`}>
         <div className={classes["user-logo"]}>{user.substring(0, 2)}</div>
         <div className={classes["message"]}>

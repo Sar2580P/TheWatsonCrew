@@ -208,11 +208,9 @@ interface chat_ai {
 const CHAT_AI: chat_ai[] = [
   {
     id: "1",
-    text: "### Introduction\n\nYoga is a holistic practice that has been shown to have numerous health benefits, including the management of diabetes. Diabetes is a chronic condition that affects the body's ability to regulate blood sugar levels. Over time, high blood sugar levels can damage the heart, blood vessels, eyes, kidneys, and nerves.\n\nYoga can help to manage diabetes by:\n\n* Improving insulin sensitivity\n* Lowering blood sugar levels\n* Reducing inflammation\n* Promoting weight loss\n* Improving overall health and well-being\n\n",
+    text: "Yoga for Lower Blood Pressure: A Comprehensive Guide\n\nNumerous studies have demonstrated the remarkable benefits of yoga in managing hypertension. By incorporating yoga into your routine, you can significantly reduce your blood pressure and improve your overall well-being.\n\n### How Yoga Works\n\n* **Relaxation and Stress Reduction:** Yoga techniques, such as deep breathing and meditation, help calm the mind and reduce stress, which are major contributors to high blood pressure.\n* **Improved Blood Vessel Flexibility:** Regular yoga practice can increase the flexibility of your blood vessels, allowing for better blood flow and reducing the strain on your heart.\n* **Enhanced Cardiovascular Health:** Yoga poses can strengthen your heart and improve its efficiency, leading to healthier blood pressure levels.\n\n### Recommended Yoga Poses for High Blood Pressure\n\n1. **Balasana (Child's Pose):**\n   * **Benefits:** Promotes relaxation, calms the mind, and stretches the hips and spine.\n   * **How to:** Kneel on the floor with your big toes touching. Sit back on your heels, extending your arms forward. Rest your forehead on the floor. Hold for 1-3 minutes.\n\n2. **Paschimottanasana (Seated Forward Bend):**\n   * **Benefits:** Calms the mind, stretches the hamstrings, and can help lower blood pressure.\n   * **How to:** Sit on the floor with your legs extended. Inhale and reach for your toes, keeping your back straight. Exhale and bend forward, reaching as far as you can without straining. Hold for 1-3 minutes.\n\n### Additional Tips\n\n* **Consistency is Key:** Practice yoga regularly to experience the full benefits.\n* **Listen to Your Body:** Avoid overexerting yourself.\n* **Consider a Yoga Class:** A guided yoga class can provide proper instruction and support.\n\nBy incorporating these yoga poses and techniques into your daily routine, you can effectively manage your blood pressure and enjoy a healthier, more balanced life. Remember to consult with your healthcare provider before starting any new exercise program.",
     external_references: {
       include: "https://www.heart.org/en/health-topics/high-blood-pressure/health-threats-from-high-blood-pressure",
-      "": "",
-      "What is high blood pressure?": "",
       arrhythmia: "https://www.healthline.com/health/arrhythmia",
       "vision loss": "https://www.healthline.com/health/hypertensive-retinopathy",
       "sexual dysfunction":
@@ -221,9 +219,6 @@ const CHAT_AI: chat_ai[] = [
       including: "https://www.ncbi.nlm.nih.gov/books/NBK430839/",
       "decreased kidney function": "https://www.healthline.com/health/pregnancy/kidney-failure-in-pregnancy",
       preeclampsia: "https://www.healthline.com/health/gestational-hypertension-vs-preeclampsia",
-      "Medically reviewed": "",
-      "Kimberly Holland": "",
-      "Updated on August 20, 2024": "",
     },
     sources: [
       "https://www.medicalnewstoday.com/articles/319506#causes",
@@ -231,10 +226,8 @@ const CHAT_AI: chat_ai[] = [
       "https://www.healthline.com/health/high-blood-pressure-hypertension",
     ],
     imgs: [
-      "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-      "//i0.wp.com/post.healthline.com/wp-content/uploads/2022/01/Debra-Sullivan-500x500-Bio.png?w=105&h=105",
-      "//i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/2022/01/Carissa-Stephens-500x500-Bio.png?w=105&h=105",
-      "//i0.wp.com/post.healthline.com/wp-content/uploads/2021/10/1535730-Everything-You-Need-to-Know-About-High-Blood-Pressure-Hypertension-1296x1109-Body.jpg?w=1155&h=2328",
+      "https://cdn.yogajournal.com/wp-content/uploads/2021/10/Childs-Pose_Andrew-Clark_1.jpg?width=730",
+      "https://cdn.yogajournal.com/wp-content/uploads/2021/12/Bound-Angle-Pose-Mod-1_Andrew-Clark_1.jpg?width=730",
       "https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/11/raise_blood-_GettyImages1171000270_Header-1024x575.jpg",
     ],
   },
