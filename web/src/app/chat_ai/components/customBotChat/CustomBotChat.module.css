@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 100%;
+  width: -webkit-fill-available;
   padding: 0.5rem 0rem;
   color: var(--primary-color);
 }
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: -webkit-fill-available;
   color: var(--primary-color);
   gap: 0.5rem;
   height: calc(100vh - 9rem);
@@ -20,6 +20,6 @@
 }
 
 .loading {
-  width: 100%;
-  padding-left: 10%;
+  width: -webkit-fill-available;
+  padding-left: 5%;
 }

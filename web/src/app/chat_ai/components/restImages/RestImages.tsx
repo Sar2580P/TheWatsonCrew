@@ -10,24 +10,9 @@ const RestImages = ({ restImages }: { restImages: string[] }) => {
   return (
     <div className={classes["container"]}>
       <h1 className={classes["heading"]}>All Images</h1>
-      <div
-        className={classes["box__images"]}
-        style={{ "--length": `${restImages.length}`, "--width": "240px", "--height": "135px" } as React.CSSProperties}
-      >
+      <div className={classes["box__images"]}>
         {restImages.map((img, index) => (
-          <Image
-            key={index}
-            src={"/robot.jpg"}
-            alt="blog"
-            width={240}
-            height={135}
-            loader={({ src }) => img}
-            style={
-              {
-                "--index": index,
-              } as React.CSSProperties
-            }
-          />
+          <Image key={index} src={"/robot.jpg"} alt="blog" width={240} height={135} loader={({ src }) => img} />
         ))}
       </div>
     </div>
