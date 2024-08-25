@@ -54,12 +54,13 @@ const BLOG_AI = [
   {
     text: '## Data Augmentation\n\nData Augmentation is the process of randomly applying operations (rotation, zoom, shift, flips,…) to the input data. This ensures that the model is never shown the exact same example twice, forcing it to learn more general features about the classes it needs to recognize.\n\n## Test Time Augmentation\n\nSimilar to Data Augmentation on the training set, Test Time Augmentation performs random modifications to the test images. Instead of showing the "clean" images only once to the trained model, we show it the augmented images several times. The predictions for each corresponding image are then averaged to arrive at the final guess.\n\n### Example of Test Time Augmentation\n\nImagine presenting 5 slightly modified versions of the same image to a network and asking it to predict the class of each. The corresponding predictions might look like this:\n\n* *Image 1:* Prediction A\n* *Image 2:* Prediction B\n* *Image 3:* Prediction A\n* *Image 4:* Prediction A\n* *Image 5:* Prediction B\n\n### Benefits of Test Time Augmentation\n\nTest Time Augmentation is particularly useful for test images that the model is unsure about. Even if those 5 images seem very similar to you, the model might perceive them as very different, as evidenced by its predictions.\n\n### Implementing Test Time Augmentation\n\nTo implement Test Time Augmentation, you can reuse the same Data Generator used for training and apply it to validation images.\n\n### Training with Test Time Augmentation\n\nAfter applying Test Time Augmentation, you can train the network for a few epochs. The final accuracy of the model on the validation images can then be evaluated.',
     external_references: {
-      "": "",
+      "external references":
+        "https://towardsdatascience.com/test-time-augmentation-tta-and-how-to-perform-it-with-keras-4ac19b67fb4d",
     },
     sources: [
       "https://towardsdatascience.com/test-time-augmentation-tta-and-how-to-perform-it-with-keras-4ac19b67fb4d",
     ],
-    imgs: [""],
+    imgs: ["https://jalammar.github.io/images/t/self-attention-output.png"],
   },
 ];
 
@@ -88,7 +89,6 @@ const WATCH_AI: watch_ai[] = [
         "https://jalammar.github.io/illustrated-transformer/",
       ],
       imgs: [
-        "",
         "https://jalammar.github.io/images/t/self-attention-output.png",
         "https://jalammar.github.io/images/t/transformer_positional_encoding_large_example.png",
         "https://jalammar.github.io/images/t/self-attention-matrix-calculation-2.png",
