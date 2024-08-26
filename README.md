@@ -54,15 +54,17 @@ So as to run our project locally, you need to follow the steps below.
    https://github.com/Sar2580P/TheWatsonCrew.git
    cd TheWatsonCrew
    ```
+   Create .env file similar to .env.example
+   
 
-2. Install dependencies for the frontend (Next.js):
+3. Install dependencies for the frontend (Next.js):
 
    ```sh
    make setup
    make setupweb
    ```
 
-3. Install dependencies for the frontend (Next.js):
+4. Install dependencies for the frontend (Next.js):
 
    ```sh
    cd web
@@ -70,7 +72,7 @@ So as to run our project locally, you need to follow the steps below.
    ```
 
 
-4. Run the development servers:
+5. Run the development servers:
 
    - For Next.js (frontend):
 
@@ -89,7 +91,7 @@ So as to run our project locally, you need to follow the steps below.
    python manage.py runserver
    ```
 
-5. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://127.0.0.1:8000/api` for the backend admin interface.
+6. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://127.0.0.1:8000/api` for the backend admin interface.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
