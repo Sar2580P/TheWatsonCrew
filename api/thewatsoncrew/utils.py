@@ -37,9 +37,9 @@ def get_evaluate_ai():
         return failed_response(str(e))
 
 def post_chat(message, status=201):
-    try:
-        print(message)
-        answer = llm_chat_response(message)
-        return success_response(answer)
-    except Exception as e:
-        return failed_response(str(e))
+    # try:
+    #     print(message)
+    #     answer = llm_chat_response(message)
+    #     return success_response(answer)
+    # except Exception as e:
+    return failed_response('Chat not available')

@@ -104,13 +104,13 @@ class ReadingInfo(BaseModel):
         embeddings = np.array([node.embedding for node in tqdm(embedded_nodes, 
                                                             desc='Assembling embeddings for clustering')])
         
-        from sklearn.preprocessing import StandardScaler
-        scaler = StandardScaler()
-        embeddings = scaler.fit_transform(embeddings)
+        # from sklearn.preprocessing import StandardScaler
+        # scaler = StandardScaler()
+        # embeddings = scaler.fit_transform(embeddings)
         
-        # Step 2: Dimensionality Reduction (Optional but recommended)
-        pca = PCA(n_components=self.config['n_components'] ,whiten=self.config['whiten'], random_state=42)  # Reduce to 50 dimensions
-        reduced_embeddings = pca.fit_transform(embeddings)
+        # # Step 2: Dimensionality Reduction (Optional but recommended)
+        # pca = PCA(n_components=self.config['n_components'] ,whiten=self.config['whiten'], random_state=42)  # Reduce to 50 dimensions
+        # reduced_embeddings = pca.fit_transform(embeddings)
         
         # tsne = TSNE(n_components=self.config['n_components'], 
         #     perplexity=self.config.get('perplexity', 30),
@@ -123,20 +123,20 @@ class ReadingInfo(BaseModel):
 
         
         # Step 3: Clustering (HDBSCAN)
-        clustering = hdbscan.HDBSCAN(min_cluster_size=self.config['min_cluster_size'],
-                                    min_samples=self.config.get('min_samples', None),  # Optional: can be None
-                                    metric=self.config.get('metric', 'euclidean'),
-                                    cluster_selection_epsilon=self.config.get('cluster_selection_epsilon', 0.0),
-                                    cluster_selection_method=self.config.get('cluster_selection_method', 'eom'), 
-                                    ).fit(reduced_embeddings)
+        # clustering = hdbscan.HDBSCAN(min_cluster_size=self.config['min_cluster_size'],
+        #                             min_samples=self.config.get('min_samples', None),  # Optional: can be None
+        #                             metric=self.config.get('metric', 'euclidean'),
+        #                             cluster_selection_epsilon=self.config.get('cluster_selection_epsilon', 0.0),
+        #                             cluster_selection_method=self.config.get('cluster_selection_method', 'eom'), 
+        #                             ).fit(reduced_embeddings)
 
-        # Step 3: Create DataFrame for clustering results
-        labels = clustering.labels_
+        # # Step 3: Create DataFrame for clustering results
+        # labels = clustering.labels_
 
-        # Optional: If you want to store additional results like probabilities
-        probabilities = clustering.probabilities_
-        pr.green(probabilities)
-        pr.purple(labels)
+        # # Optional: If you want to store additional results like probabilities
+        # probabilities = clustering.probabilities_
+        # pr.green(probabilities)
+
         ids = range(len(embedded_nodes))
         ranks = [node.metadata['rank'] for node in embedded_nodes]
         source_labels = [node.metadata['document_label'] for node in embedded_nodes]
@@ -144,9 +144,8 @@ class ReadingInfo(BaseModel):
         meta_data = [node.metadata for node in embedded_nodes]
         df = pd.DataFrame({
             'id': ids,
-            'label': labels,
             'rank': ranks, 
-            'source_label': source_labels,
+            'label': source_labels,
             'content': content, 
             'metadata': meta_data,
         })
@@ -154,23 +153,23 @@ class ReadingInfo(BaseModel):
         # Step 4: Save DataFrame to CSV file
         save_path = self.base_dir / 'clustering_results.csv'
         df.to_csv(save_path, index=False)
-        logger.debug(f"clustering CSV file saved: {save_path}")
+        # logger.debug(f"clustering CSV file saved: {save_path}")
 
-        tsne_embedded = TSNE(n_components=3, random_state=42).fit_transform(reduced_embeddings)
+        # tsne_embedded = TSNE(n_components=3, random_state=42).fit_transform(reduced_embeddings)
         
-        fig = plt.figure(figsize=(12, 10))
-        ax = fig.add_subplot(111, projection='3d')
-        scatter = ax.scatter(tsne_embedded[:, 0], tsne_embedded[:, 1], tsne_embedded[:, 2],c=labels , cmap='viridis', alpha=0.5)
+        # fig = plt.figure(figsize=(12, 10))
+        # ax = fig.add_subplot(111, projection='3d')
+        # scatter = ax.scatter(tsne_embedded[:, 0], tsne_embedded[:, 1], tsne_embedded[:, 2],c=labels , cmap='viridis', alpha=0.5)
         
-        ax.set_title('3D TSNE Plot of Clustering')
-        ax.set_xlabel('TSNE Component 1')
-        ax.set_ylabel('TSNE Component 2')
-        ax.set_zlabel('TSNE Component 3')
+        # ax.set_title('3D TSNE Plot of Clustering')
+        # ax.set_xlabel('TSNE Component 1')
+        # ax.set_ylabel('TSNE Component 2')
+        # ax.set_zlabel('TSNE Component 3')
         
-        legend1 = ax.legend(*scatter.legend_elements(), title="Clusters")
-        ax.add_artist(legend1)
+        # legend1 = ax.legend(*scatter.legend_elements(), title="Clusters")
+        # ax.add_artist(legend1)
         
-        plt.savefig(self.base_dir/'clustering_tsne_plot_3d.png')
+        # plt.savefig(self.base_dir/'clustering_tsne_plot_3d.png')
 
     
     def ordering_content(self, df:pd.DataFrame)->Tuple[List ,List]:
@@ -225,7 +224,7 @@ class ReadingInfo(BaseModel):
             return note
         try:
             # Create a list of tasks for asynchronous fetching of notes
-            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[:max_notes], desc = 'making notes using LLM')]
+            tasks = [fetch_note(content, self.combine_info_template) for content in tqdm(self.content[1:max_notes], desc = 'making notes using LLM')]
             
             # Await the completion of all tasks
             self.aggregated_notes_collection = await asyncio.gather(*tasks)
@@ -294,7 +293,7 @@ class ReadingInfo(BaseModel):
 
 if __name__ == '__main__':
     KB_Creator = ReadingInfo.from_config(config_path='../Intelligence/configs/tools/teacher.yaml')
-    # KB_Creator.get_clustering()
+    KB_Creator.get_clustering()
     # x = KB_Creator.ordering_content(pd.read_csv('../Intelligence/tools/teacher/clustering_results.csv'))
     # y = asyncio.run(KB_Creator.create_notes(max_notes = 2))
     # pr.green(y)

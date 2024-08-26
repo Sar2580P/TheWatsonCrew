@@ -1,6 +1,6 @@
 from typing import Mapping, Any, Generator, Optional
 from pydantic import Field
-from llama_index.core.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata
+from llama_index.core.llms import CustomLLM, CompletionResponse, LLMMetadata
 from llama_index.core.llms.callbacks import llm_completion_callback
 from ibm_watson_machine_learning.foundation_models import Model
 import os
