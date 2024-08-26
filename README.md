@@ -1,10 +1,6 @@
 # TheWatsonCrew
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+
 
 <br />
 <div align="center">
@@ -27,6 +23,11 @@
 
 The Learning App is designed to provide a personalized educational experience. Users can input links to resources they want to learn from, and the LLM will update its knowledge base accordingly. The app offers various features, including reading generated pages, learning through video lectures, taking tests, and chatting with the AI.
 
+We acknowledge the Watsonx.ai LLMs offered to us by IBM in the hackthon organised by Lablab.ai in collaboration with IBM. 
+
+![IBM Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png)
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -42,6 +43,8 @@ The Learning App is designed to provide a personalized educational experience. U
 ## Getting Started
 
 So as to run our project locally, you need to follow the steps below.
+
+**Use linux distro like ubuntu, as repo has .sh scripts for automation.**
 
 ### Installation
 
@@ -66,16 +69,8 @@ So as to run our project locally, you need to follow the steps below.
    npm install
    ```
 
-4. Install dependencies for the backend (Django):
 
-   ```sh
-   cd ../api
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-5. Run the development servers:
+4. Run the development servers:
 
    - For Next.js (frontend):
 
@@ -85,14 +80,16 @@ So as to run our project locally, you need to follow the steps below.
    npm start
    ```
 
-   - For Django (backend):
+   - (Backend):
 
    ```sh
-   cd ../api
+   cd ..
+   bash activate.sh
+   cd api
    python manage.py runserver
    ```
 
-6. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://127.0.0.1:8000/api` for the backend admin interface.
+5. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://127.0.0.1:8000/api` for the backend admin interface.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

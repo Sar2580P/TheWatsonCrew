@@ -2484,24 +2484,6 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<9.0.0"
 typing-extensions = ">=4.7"
 
 [[package]]
-name = "langchain-google-genai"
-version = "1.0.6"
-description = "An integration package connecting Google's genai package and LangChain"
-optional = false
-python-versions = "<4.0,>=3.9"
-files = [
-    {file = "langchain_google_genai-1.0.6-py3-none-any.whl", hash = "sha256:65188b3c2867efda78e09c29371499ab0d25c6a111b175365fdae2b5be1502e6"},
-    {file = "langchain_google_genai-1.0.6.tar.gz", hash = "sha256:7c964117fa385c490b323ee50ab46907229823d3678b80bfacc8fa0a237fb0b9"},
-]
-
-[package.dependencies]
-google-generativeai = ">=0.5.2,<0.6.0"
-langchain-core = ">=0.2.2,<0.3"
-
-[package.extras]
-images = ["pillow (>=10.1.0,<11.0.0)"]
-
-[[package]]
 name = "langchain-ibm"
 version = "0.1.12"
 description = "An integration package connecting IBM watsonx.ai and LangChain"
@@ -6717,4 +6699,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c6ad3ecc305dd80c1bd7e152fe8e1f460aef7593e84576efcb347d1cb26dd0f6"
+content-hash = "39abe4567b776e304bf402c419e6a1d51cf1c98849124616b164113513ba231c"
